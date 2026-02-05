@@ -264,8 +264,24 @@ When creating a new skill from scratch, always run the `init_skill.py` script. T
 Usage:
 
 ```bash
+# Interactive mode - asks where to create the skill (default: .agents/skills/)
+scripts/init_skill.py <skill-name>
+
+# Specify custom path directly
 scripts/init_skill.py <skill-name> --path <output-directory>
+
+# Non-interactive mode - uses default .agents/skills/ without asking
+scripts/init_skill.py <skill-name> --non-interactive
 ```
+
+The script will:
+
+- **Interactive mode (default)**: Ask you to choose where to create the skill:
+  1. Default location: `.agents/skills/` (Recommended)
+  2. Current directory
+  3. Custom path of your choice
+
+- **Non-interactive mode**: Automatically use the default `.agents/skills/` directory
 
 The script:
 

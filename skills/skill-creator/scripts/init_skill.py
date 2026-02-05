@@ -3,11 +3,12 @@
 Skill Initializer - Creates a new skill from template
 
 Usage:
-    init_skill.py <skill-name> [--path <path>] [--python] [--uv]
+    init_skill.py <skill-name> [--path <path>] [--non-interactive] [--python] [--uv]
 
 Examples:
-    init_skill.py my-new-skill                           # Creates in ./skills/
+    init_skill.py my-new-skill                           # Interactive path choice (default: .agents/skills/)
     init_skill.py my-api-helper --path custom/location   # Custom path
+    init_skill.py data-processor --non-interactive       # Use default .agents/skills/ without asking
     init_skill.py data-processor --python --uv          # With Python + uv setup
 """
 
@@ -320,31 +321,93 @@ def title_case_skill_name(skill_name):
     return " ".join(word.capitalize() for word in skill_name.split("-"))
 
 
-def init_skill(skill_name, path=None, setup_python=False, use_uv=False):
+def get_user_choice_path(skill_name):
+    """
+    Ask user for the skill installation path with interactive menu.
+
+    Args:
+        skill_name: Name of the skill being created
+
+    Returns:
+        Path object for the chosen directory
+    """
+    current_dir = Path.cwd()
+    default_path = current_dir / ".agents" / "skills"
+
+    print(f"\n📁 Where would you like to create the '{skill_name}' skill?")
+    print(f"1. Default location: {default_path} (Recommended)")
+    print(f"2. Current directory: {current_dir}")
+    print(f"3. Custom path")
+
+    while True:
+        try:
+            choice = input(
+                "\nEnter your choice (1-3, or press Enter for default): "
+            ).strip()
+
+            if not choice or choice == "1":
+                # Default: .agents/skills
+                path = default_path
+                break
+            elif choice == "2":
+                # Current directory
+                path = current_dir
+                break
+            elif choice == "3":
+                # Custom path
+                custom_path = input("Enter custom path: ").strip()
+                if custom_path:
+                    path = Path(custom_path).expanduser().resolve()
+                    # Confirm the custom path
+                    print(f"\nUsing custom path: {path}")
+                    confirm = input("Is this correct? (y/N): ").strip().lower()
+                    if confirm in ("y", "yes"):
+                        break
+                    else:
+                        print("Please choose again.")
+                        continue
+                else:
+                    print("Please enter a valid path.")
+                    continue
+            else:
+                print("Please enter 1, 2, or 3.")
+                continue
+
+        except KeyboardInterrupt:
+            print("\n\n❌ Operation cancelled by user")
+            return None
+        except Exception as e:
+            print(f"❌ Error: {e}")
+            continue
+
+    return path
+
+
+def init_skill(
+    skill_name, path=None, setup_python=False, use_uv=False, interactive=True
+):
     """
     Initialize a new skill directory with template SKILL.md.
 
     Args:
         skill_name: Name of the skill
-        path: Path where the skill directory should be created (default: ./skills/)
+        path: Path where the skill directory should be created (default: ask user)
         setup_python: Whether to setup Python environment
         use_uv: Whether to use uv for Python setup
+        interactive: Whether to ask user for path choice (default: True)
 
     Returns:
         Path to created skill directory, or None if error
     """
-    # Default path handling
+    # Path handling with user interaction
     if path is None:
-        # Check if we're in a skills repository
-        current_dir = Path.cwd()
-        if (current_dir / "skills").exists():
-            path = current_dir / "skills"
-        elif current_dir.name == "skills":
-            path = current_dir
+        if interactive:
+            path = get_user_choice_path(skill_name)
+            if path is None:  # User cancelled
+                return None
         else:
-            # Create skills directory in current location
-            path = current_dir / "skills"
-            path.mkdir(exist_ok=True)
+            # Non-interactive mode: use default .agents/skills
+            path = Path.cwd() / ".agents" / "skills"
     else:
         path = Path(path)
 
@@ -416,7 +479,13 @@ def main():
         "skill_name", help="Name of the skill to create (use-hyphen-case)"
     )
     parser.add_argument(
-        "--path", help="Directory where skill should be created (default: ./skills/)"
+        "--path",
+        help="Directory where skill should be created (default: interactive choice)",
+    )
+    parser.add_argument(
+        "--non-interactive",
+        action="store_true",
+        help="Skip interactive path selection and use default .agents/skills",
     )
     parser.add_argument(
         "--python", action="store_true", help="Setup Python environment"
@@ -436,9 +505,16 @@ def main():
     if args.uv:
         args.python = True
 
+    # Determine interactive mode
+    interactive = not args.non_interactive and args.path is None
+
     # Create skill
     result = init_skill(
-        args.skill_name, path=args.path, setup_python=args.python, use_uv=args.uv
+        args.skill_name,
+        path=args.path,
+        setup_python=args.python,
+        use_uv=args.uv,
+        interactive=interactive,
     )
 
     if result:
