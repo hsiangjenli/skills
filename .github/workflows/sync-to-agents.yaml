@@ -1,0 +1,53 @@
+name: Sync from skills to .agents/skills
+
+on:
+    push:
+        paths:
+            - "skills/**"
+
+jobs:
+    sync-to-agents:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 2
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "18"
+
+            - name: Check if last commit was auto-generated
+              id: check_auto_commit
+              run: |
+                  LAST_COMMIT_MSG=$(git log -1 --pretty=format:"%s")
+                  if [[ "$LAST_COMMIT_MSG" == *"chore(auto): sync .agents/skills from remote"* ]]; then
+                    echo "skip=true" >> $GITHUB_OUTPUT
+                    echo "Last commit was auto-sync to .agents/skills, skipping to avoid infinite loop"
+                  else
+                    echo "skip=false" >> $GITHUB_OUTPUT
+                  fi
+
+            - name: Sync skills to .agents/skills
+              if: steps.check_auto_commit.outputs.skip == 'false'
+              run: |
+                  echo "Syncing skills to .agents/skills using npx..."
+                  npx skills add hsiangjenli/skills
+
+            - name: Commit and push changes
+              if: steps.check_auto_commit.outputs.skip == 'false'
+              run: |
+                  git config --local user.email "action@github.com"
+                  git config --local user.name "GitHub Action"
+                  git add .agents/skills/
+                  if git diff --staged --quiet; then
+                    echo "No changes to commit"
+                  else
+                    git commit -m "chore(auto): sync .agents/skills from remote"
+                    git push
+                  fi
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

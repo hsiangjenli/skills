@@ -1,0 +1,52 @@
+name: Sync from .agents/skills to skills
+
+on:
+  push:
+    paths:
+      - ".agents/skills/**"
+
+jobs:
+  sync-to-skills:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Check if last commit was auto-generated
+        id: check_auto_commit
+        run: |
+          LAST_COMMIT_MSG=$(git log -1 --pretty=format:"%s")
+          if [[ "$LAST_COMMIT_MSG" == *"chore(auto): sync skills from .agents/skills"* ]]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "Last commit was auto-sync from .agents/skills, skipping to avoid infinite loop"
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Copy .agents/skills to skills
+        if: steps.check_auto_commit.outputs.skip == 'false'
+        run: |
+          echo "Syncing .agents/skills to skills..."
+          rm -rf skills
+          mkdir -p skills
+          if [ -d ".agents/skills" ] && [ "$(ls -A .agents/skills)" ]; then
+            cp -r .agents/skills/* skills/
+          fi
+
+      - name: Commit and push changes
+        if: steps.check_auto_commit.outputs.skip == 'false'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add skills/
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore(auto): sync skills from .agents/skills"
+            git push
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
