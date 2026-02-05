@@ -3,19 +3,77 @@
 Skill Initializer - Creates a new skill from template
 
 Usage:
-    init_skill.py <skill-name> --path <path>
+    init_skill.py <skill-name> [--path <path>] [--python] [--uv]
 
 Examples:
-    init_skill.py my-new-skill --path skills/public
-    init_skill.py my-api-helper --path skills/private
-    init_skill.py custom-skill --path /custom/location
+    init_skill.py my-new-skill                           # Creates in ./skills/
+    init_skill.py my-api-helper --path custom/location   # Custom path
+    init_skill.py data-processor --python --uv          # With Python + uv setup
 """
 
 import sys
+import shutil
+import subprocess
+import os
 from pathlib import Path
+import argparse
 
 
-SKILL_TEMPLATE = """---
+def check_dependencies():
+    """Check if required dependencies are available."""
+    dependencies = {
+        "python": "Python is required for skill development",
+        "uv": "uv is recommended for Python dependency management. Install from https://docs.astral.sh/uv/",
+        "git": "Git is used for version control. Install from https://git-scm.com/",
+    }
+
+    available = {}
+    for dep, message in dependencies.items():
+        try:
+            result = subprocess.run(
+                [dep, "--version"], capture_output=True, text=True, timeout=5
+            )
+            available[dep] = result.returncode == 0
+            if dep == "uv" and available[dep]:
+                print(f"✅ {dep} is available")
+        except (subprocess.TimeoutExpired, FileNotFoundError):
+            available[dep] = False
+            if dep != "uv":  # uv is optional
+                print(f"⚠️ {dep} not found: {message}")
+
+    return available
+
+
+def setup_python_environment(skill_dir, use_uv=False):
+    """Setup Python environment for the skill."""
+    if use_uv and shutil.which("uv"):
+        try:
+            # Initialize uv project
+            subprocess.run(
+                ["uv", "init", "--name", skill_dir.name],
+                cwd=skill_dir,
+                check=True,
+                capture_output=True,
+            )
+            # Add common dependencies
+            common_deps = ["requests", "pathlib"]
+            for dep in common_deps:
+                subprocess.run(
+                    ["uv", "add", dep], cwd=skill_dir, check=True, capture_output=True
+                )
+            print("✅ Python environment created with uv")
+            return True
+        except subprocess.CalledProcessError as e:
+            print(f"⚠️ uv setup failed: {e}")
+            return False
+    else:
+        print("🐍 uv not available, skipping Python environment setup")
+        return False
+
+
+def create_skill_template(skill_name, skill_title):
+    """Create the main SKILL.md template."""
+    return f"""---
 name: {skill_name}
 description: [TODO: Complete and informative explanation of what the skill does and when to use it. Include WHEN to use this skill - specific scenarios, file types, or tasks that trigger it.]
 ---
@@ -102,28 +160,96 @@ Files not intended to be loaded into context, but rather used within the output 
 **Any unneeded directories can be deleted.** Not every skill requires all three types of resources.
 """
 
-EXAMPLE_SCRIPT = '''#!/usr/bin/env python3
-"""
-Example helper script for {skill_name}
 
-This is a placeholder script that can be executed directly.
+def create_script_template(skill_name, skill_title):
+    """Create a helper script template."""
+    return f"""#!/usr/bin/env python3
+\"\"\"
+{skill_title} Helper Script
+
+Utility script for {skill_name} operations.
 Replace with actual implementation or delete if not needed.
 
-Example real scripts from other skills:
-- pdf/scripts/fill_fillable_fields.py - Fills PDF form fields
-- pdf/scripts/convert_pdf_to_images.py - Converts PDF pages to images
-"""
+Usage:
+    uv run python {skill_name}_helper.py [options]
+    
+Examples from other skills:
+- Image processing: resize, compress, convert formats
+- Data processing: CSV to JSON, API data fetching
+- File operations: batch rename, organize, validate
+\"\"\"
+
+import argparse
+import sys
+from pathlib import Path
+
+def process_files(input_path, output_path=None):
+    \"\"\"Example function - replace with actual logic.\"\"\"
+    input_path = Path(input_path)
+    
+    if not input_path.exists():
+        print(f"❌ Input path does not exist: {{input_path}}")
+        return False
+        
+    print(f"📁 Processing: {{input_path}}")
+    
+    # TODO: Add your processing logic here
+    # Examples:
+    # - Process images: resize, compress, convert
+    # - Transform data: CSV to JSON, clean data
+    # - Generate content: templates, reports, documentation
+    
+    if output_path:
+        output_path = Path(output_path)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        print(f"💾 Output will be saved to: {{output_path}}")
+    
+    print("✅ Processing completed successfully")
+    return True
 
 def main():
-    print("This is an example script for {skill_name}")
-    # TODO: Add actual script logic here
-    # This could be data processing, file conversion, API calls, etc.
+    parser = argparse.ArgumentParser(
+        description="{skill_title} helper script"
+    )
+    parser.add_argument(
+        "input", 
+        help="Input file or directory to process"
+    )
+    parser.add_argument(
+        "--output", "-o",
+        help="Output file or directory (optional)"
+    )
+    parser.add_argument(
+        "--verbose", "-v",
+        action="store_true",
+        help="Enable verbose output"
+    )
+    
+    args = parser.parse_args()
+    
+    if args.verbose:
+        print(f"🚀 Starting {skill_name} processing...")
+        print(f"📄 Input: {{args.input}}")
+        if args.output:
+            print(f"💾 Output: {{args.output}}")
+    
+    success = process_files(args.input, args.output)
+    
+    if success:
+        print("🎉 Task completed successfully!")
+        sys.exit(0)
+    else:
+        print("❌ Task failed")
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
-'''
+"""
 
-EXAMPLE_REFERENCE = """# Reference Documentation for {skill_title}
+
+def create_reference_template(skill_title):
+    """Create reference documentation template."""
+    return f"""# Reference Documentation for {skill_title}
 
 This is a placeholder for detailed reference documentation.
 Replace with actual reference content or delete if not needed.
@@ -159,7 +285,10 @@ Reference docs are ideal for:
 - Best practices
 """
 
-EXAMPLE_ASSET = """# Example Asset File
+
+def create_asset_template():
+    """Create asset placeholder."""
+    return """# Example Asset File
 
 This placeholder represents where asset files would be stored.
 Replace with actual asset files (templates, images, fonts, etc.) or delete if not needed.
@@ -191,108 +320,126 @@ def title_case_skill_name(skill_name):
     return " ".join(word.capitalize() for word in skill_name.split("-"))
 
 
-def init_skill(skill_name, path):
+def init_skill(skill_name, path=None, setup_python=False, use_uv=False):
     """
     Initialize a new skill directory with template SKILL.md.
 
     Args:
         skill_name: Name of the skill
-        path: Path where the skill directory should be created
+        path: Path where the skill directory should be created (default: ./skills/)
+        setup_python: Whether to setup Python environment
+        use_uv: Whether to use uv for Python setup
 
     Returns:
         Path to created skill directory, or None if error
     """
-    # Determine skill directory path
-    skill_dir = Path(path).resolve() / skill_name
+    # Default path handling
+    if path is None:
+        # Check if we're in a skills repository
+        current_dir = Path.cwd()
+        if (current_dir / "skills").exists():
+            path = current_dir / "skills"
+        elif current_dir.name == "skills":
+            path = current_dir
+        else:
+            # Create skills directory in current location
+            path = current_dir / "skills"
+            path.mkdir(exist_ok=True)
+    else:
+        path = Path(path)
 
-    # Check if directory already exists
-    if skill_dir.exists():
-        print(f"❌ Error: Skill directory already exists: {skill_dir}")
-        return None
-
-    # Create skill directory
-    try:
-        skill_dir.mkdir(parents=True, exist_ok=False)
-        print(f"✅ Created skill directory: {skill_dir}")
-    except Exception as e:
-        print(f"❌ Error creating directory: {e}")
-        return None
-
-    # Create SKILL.md from template
+    skill_dir = path / skill_name
     skill_title = title_case_skill_name(skill_name)
-    skill_content = SKILL_TEMPLATE.format(
-        skill_name=skill_name, skill_title=skill_title
-    )
 
-    skill_md_path = skill_dir / "SKILL.md"
-    try:
-        skill_md_path.write_text(skill_content)
-        print("✅ Created SKILL.md")
-    except Exception as e:
-        print(f"❌ Error creating SKILL.md: {e}")
+    # Check if skill already exists
+    if skill_dir.exists():
+        print(f"❌ Skill already exists: {skill_dir}")
         return None
 
-    # Create resource directories with example files
     try:
-        # Create scripts/ directory with example script
+        # Create skill directory structure
+        skill_dir.mkdir(parents=True)
+
+        # Create SKILL.md
+        skill_md = skill_dir / "SKILL.md"
+        skill_md.write_text(create_skill_template(skill_name, skill_title))
+
+        # Create optional directories with examples
         scripts_dir = skill_dir / "scripts"
         scripts_dir.mkdir(exist_ok=True)
-        example_script = scripts_dir / "example.py"
-        example_script.write_text(EXAMPLE_SCRIPT.format(skill_name=skill_name))
-        example_script.chmod(0o755)
-        print("✅ Created scripts/example.py")
 
-        # Create references/ directory with example reference doc
+        # Create example script
+        example_script = scripts_dir / f"{skill_name}_helper.py"
+        example_script.write_text(create_script_template(skill_name, skill_title))
+        example_script.chmod(0o755)  # Make executable
+
+        # Create references directory
         references_dir = skill_dir / "references"
         references_dir.mkdir(exist_ok=True)
-        example_reference = references_dir / "api_reference.md"
-        example_reference.write_text(EXAMPLE_REFERENCE.format(skill_title=skill_title))
-        print("✅ Created references/api_reference.md")
 
-        # Create assets/ directory with example asset placeholder
+        # Create example reference
+        example_reference = references_dir / "api_reference.md"
+        example_reference.write_text(create_reference_template(skill_title))
+
+        # Create assets directory
         assets_dir = skill_dir / "assets"
         assets_dir.mkdir(exist_ok=True)
-        example_asset = assets_dir / "example_asset.txt"
-        example_asset.write_text(EXAMPLE_ASSET)
-        print("✅ Created assets/example_asset.txt")
+
+        # Create example asset placeholder
+        example_asset = assets_dir / "README.md"
+        example_asset.write_text(create_asset_template())
+
+        print(f"✅ Created skill directory: {skill_dir}")
+        print(f"📄 Main file: {skill_md}")
+        print(f"🐍 Example script: {example_script}")
+        print(f"📚 Reference docs: {example_reference}")
+        print(f"🗂️ Assets: {example_asset}")
+
+        # Setup Python environment if requested
+        if setup_python or use_uv:
+            setup_python_environment(skill_dir, use_uv=use_uv)
+
+        return skill_dir
+
     except Exception as e:
-        print(f"❌ Error creating resource directories: {e}")
+        print(f"❌ Error creating skill: {e}")
+        # Clean up on failure
+        if skill_dir.exists():
+            shutil.rmtree(skill_dir)
         return None
-
-    # Print next steps
-    print(f"\n✅ Skill '{skill_name}' initialized successfully at {skill_dir}")
-    print("\nNext steps:")
-    print("1. Edit SKILL.md to complete the TODO items and update the description")
-    print(
-        "2. Customize or delete the example files in scripts/, references/, and assets/"
-    )
-    print("3. Run the validator when ready to check the skill structure")
-
-    return skill_dir
 
 
 def main():
-    if len(sys.argv) < 4 or sys.argv[2] != "--path":
-        print("Usage: init_skill.py <skill-name> --path <path>")
-        print("\nSkill name requirements:")
-        print("  - Hyphen-case identifier (e.g., 'data-analyzer')")
-        print("  - Lowercase letters, digits, and hyphens only")
-        print("  - Max 40 characters")
-        print("  - Must match directory name exactly")
-        print("\nExamples:")
-        print("  init_skill.py my-new-skill --path skills/public")
-        print("  init_skill.py my-api-helper --path skills/private")
-        print("  init_skill.py custom-skill --path /custom/location")
-        sys.exit(1)
+    """Main entry point."""
+    parser = argparse.ArgumentParser(description="Initialize a new skill from template")
+    parser.add_argument(
+        "skill_name", help="Name of the skill to create (use-hyphen-case)"
+    )
+    parser.add_argument(
+        "--path", help="Directory where skill should be created (default: ./skills/)"
+    )
+    parser.add_argument(
+        "--python", action="store_true", help="Setup Python environment"
+    )
+    parser.add_argument(
+        "--uv",
+        action="store_true",
+        help="Use uv for Python dependency management (implies --python)",
+    )
 
-    skill_name = sys.argv[1]
-    path = sys.argv[3]
+    args = parser.parse_args()
 
-    print(f"🚀 Initializing skill: {skill_name}")
-    print(f"   Location: {path}")
-    print()
+    # Check dependencies
+    deps = check_dependencies()
 
-    result = init_skill(skill_name, path)
+    # If --uv is specified, enable python as well
+    if args.uv:
+        args.python = True
+
+    # Create skill
+    result = init_skill(
+        args.skill_name, path=args.path, setup_python=args.python, use_uv=args.uv
+    )
 
     if result:
         sys.exit(0)
