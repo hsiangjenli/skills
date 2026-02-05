@@ -13,10 +13,13 @@ import subprocess
 import shutil
 from pathlib import Path
 
+
 def run_command(cmd, cwd=None, check=True):
     """Run shell command and return result."""
     try:
-        result = subprocess.run(cmd, shell=True, cwd=cwd, capture_output=True, text=True, check=check)
+        result = subprocess.run(
+            cmd, shell=True, cwd=cwd, capture_output=True, text=True, check=check
+        )
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:
         print(f"Error running command '{cmd}': {e}")
@@ -25,33 +28,35 @@ def run_command(cmd, cwd=None, check=True):
             sys.exit(1)
         return None
 
+
 def check_dependencies():
     """Check if required dependencies are available."""
     dependencies = {
-        'node': 'Node.js is required. Install from https://nodejs.org/',
-        'npm': 'npm is required (usually comes with Node.js)',
-        'uv': 'uv is required for Python dependency management. Install from https://docs.astral.sh/uv/getting-started/installation/',
+        "node": "Node.js is required. Install from https://nodejs.org/",
+        "npm": "npm is required (usually comes with Node.js)",
+        "uv": "uv is required for Python dependency management. Install from https://docs.astral.sh/uv/getting-started/installation/",
     }
-    
+
     for cmd, message in dependencies.items():
         if not shutil.which(cmd):
             print(f"❌ {cmd} not found. {message}")
             return False
-    
+
     print("✅ Dependencies check passed")
     return True
 
+
 def setup_slidev_project(project_name, template_type="academic"):
     """Create new Slidev project with Neversink theme."""
-    
+
     if os.path.exists(project_name):
         print(f"❌ Directory '{project_name}' already exists")
         return False
-    
+
     # Create project directory
     os.makedirs(project_name)
     print(f"📁 Created project directory: {project_name}")
-    
+
     # Initialize npm project
     print("📦 Initializing npm project...")
     package_json = {
@@ -60,47 +65,47 @@ def setup_slidev_project(project_name, template_type="academic"):
         "scripts": {
             "build": "slidev build",
             "dev": "slidev --open",
-            "export": "slidev export"
+            "export": "slidev export",
         },
         "dependencies": {
             "@slidev/cli": "latest",
-            "@slidev/theme-default": "latest", 
-            "slidev-theme-neversink": "latest"
-        }
+            "@slidev/theme-default": "latest",
+            "slidev-theme-neversink": "latest",
+        },
     }
-    
+
     with open(f"{project_name}/package.json", "w") as f:
         json.dump(package_json, f, indent=2)
-    
+
     # Create Python project structure if needed
     python_dir = f"{project_name}/scripts"
     os.makedirs(python_dir, exist_ok=True)
-    
+
     # Initialize uv project in scripts directory
     print("🐍 Setting up Python environment with uv...")
     run_command("uv init --name presentation-tools", cwd=python_dir, check=False)
-    
+
     # Install Python dependencies for presentation tools
     python_deps = ["requests", "pillow", "markdown"]
     for dep in python_deps:
         run_command(f"uv add {dep}", cwd=python_dir, check=False)
-    
+
     # Install Node.js dependencies
     print("⬇️ Installing Slidev and Neversink theme...")
     install_cmd = "npm install"
     result = run_command(install_cmd, cwd=project_name, check=False)
-    
+
     if result is None:
         print("⚠️ npm install failed, trying with --legacy-peer-deps")
         run_command("npm install --legacy-peer-deps", cwd=project_name)
-    
+
     # Copy template
     template_files = {
         "academic": "academic-template.md",
-        "technical": "technical-template.md", 
-        "business": "business-template.md"
+        "technical": "technical-template.md",
+        "business": "business-template.md",
     }
-    
+
     if template_type in template_files:
         template_file = template_files[template_type]
         # In a real implementation, you'd copy from the skill's assets directory
@@ -108,11 +113,11 @@ def setup_slidev_project(project_name, template_type="academic"):
         create_basic_template(project_name, template_type)
     else:
         create_basic_template(project_name, "default")
-    
+
     # Create additional files
     create_gitignore(project_name)
     create_readme(project_name, template_type)
-    
+
     print(f"✅ Neversink presentation '{project_name}' created successfully!")
     print(f"")
     print(f"Next steps:")
@@ -121,12 +126,13 @@ def setup_slidev_project(project_name, template_type="academic"):
     print(f"")
     print(f"Template type: {template_type}")
     print(f"Edit slides.md to customize your presentation")
-    
+
     return True
+
 
 def create_basic_template(project_name, template_type):
     """Create a basic slides.md template."""
-    
+
     templates = {
         "academic": """---
 theme: neversink
@@ -388,15 +394,16 @@ layout: end
 # Learn More
 
 [Documentation](https://sli.dev) · [GitHub](https://github.com/slidevjs/slidev)
-"""
+""",
     }
-    
+
     template = templates.get(template_type, templates["default"])
-    
+
     with open(f"{project_name}/slides.md", "w") as f:
         f.write(template)
-    
+
     print(f"📄 Created slides.md with {template_type} template")
+
 
 def create_gitignore(project_name):
     """Create .gitignore file."""
@@ -425,9 +432,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 """
-    
+
     with open(f"{project_name}/.gitignore", "w") as f:
         f.write(gitignore_content)
+
 
 def create_readme(project_name, template_type):
     """Create README.md file."""
@@ -483,9 +491,10 @@ This presentation uses the **{template_type}** template from Neversink theme.
 - [Neversink Theme](https://github.com/gureckis/slidev-theme-neversink)
 - [uv Documentation](https://docs.astral.sh/uv/)
 """
-    
+
     with open(f"{project_name}/README.md", "w") as f:
         f.write(readme_content)
+
 
 def main():
     """Main function."""
@@ -493,23 +502,24 @@ def main():
         print("Usage: python setup_presentation.py <project-name> [template-type]")
         print("Template types: academic, technical, business")
         sys.exit(1)
-    
+
     project_name = sys.argv[1]
     template_type = sys.argv[2] if len(sys.argv) > 2 else "academic"
-    
+
     print("🚀 Setting up Neversink presentation...")
     print(f"Project: {project_name}")
     print(f"Template: {template_type}")
     print()
-    
+
     if not check_dependencies():
         sys.exit(1)
-    
+
     if setup_slidev_project(project_name, template_type):
         print("🎉 Setup complete! Happy presenting!")
     else:
         print("❌ Setup failed")
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()
