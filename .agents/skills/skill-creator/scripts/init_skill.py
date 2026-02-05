@@ -28,7 +28,7 @@ class SkillTemplate:
 
     def __init__(self):
         """Initialize with template directory path."""
-        self.template_dir = Path(__file__).parent.parent / "templates"
+        self.template_dir = Path(__file__).parent.parent / "assets" / "templates"
 
     def load_template(self, template_name: str) -> str:
         """Load template from file."""

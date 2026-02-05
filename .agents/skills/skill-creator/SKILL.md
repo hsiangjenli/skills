@@ -28,11 +28,11 @@ skill-name/
 ├── SKILL.md (required)
 │   ├── YAML frontmatter (name, description)
 │   └── Markdown instructions
-├── templates/        - Template files for skill generation
 └── Optional Resources
     ├── scripts/      - Executable code
     ├── references/   - Documentation for context
     └── assets/       - Output templates/files
+        └── templates/ - Template files (for skill-creator only)
 ```
 
 ## Creation Workflow
@@ -63,14 +63,6 @@ uv run scripts/init_skill.py my-skill-name --path ./custom/location
 - Reference bundled resources clearly
 
 ### 3. Add Resources (Optional)
-
-**Templates** (`templates/`): Template files used for skill generation
-- `skill.md.template` - Main SKILL.md template
-- `helper_script.py.template` - Python script template  
-- `reference.md.template` - Reference documentation template
-- `asset_readme.md.template` - Asset directory template
-- `pyproject.toml.template` - Python project configuration
-- `check_dependencies.py.template` - Dependency management script
 
 **Scripts** (`scripts/`): Executable code for deterministic tasks
 
@@ -109,6 +101,13 @@ uv run scripts/helper.py
 - PowerPoint templates
 - HTML boilerplate directories
 - Configuration files
+- `templates/` (skill-creator only) - Template files for skill generation:
+  - `skill.md.template` - Main SKILL.md template
+  - `helper_script.py.template` - Python script template  
+  - `reference.md.template` - Reference documentation template
+  - `asset_readme.md.template` - Asset directory template
+  - `pyproject.toml.template` - Python project configuration
+  - `check_dependencies.py.template` - Dependency management script
 
 ### 4. Package Skill
 
