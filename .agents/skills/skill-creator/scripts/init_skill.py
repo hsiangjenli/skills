@@ -26,121 +26,47 @@ class SkillError(Exception):
 class SkillTemplate:
     """Handles skill template generation."""
 
-    @staticmethod
-    def create_skill_markdown(skill_name: str) -> str:
+    def __init__(self):
+        """Initialize with template directory path."""
+        self.template_dir = Path(__file__).parent.parent / "templates"
+
+    def load_template(self, template_name: str) -> str:
+        """Load template from file."""
+        template_file = self.template_dir / template_name
+        if not template_file.exists():
+            raise SkillError(f"Template not found: {template_file}")
+        return template_file.read_text()
+
+    def create_skill_markdown(self, skill_name: str) -> str:
         """Generate main SKILL.md content."""
         title = skill_name.replace("-", " ").title()
-        return f"""---
-name: {skill_name}
-description: "TODO: Complete description of what this skill does and when to use it"
----
+        template = self.load_template("skill.md.template")
+        return template.format(skill_name=skill_name, title=title)
 
-# {title}
-
-## Overview
-
-[TODO: Brief explanation of skill purpose]
-
-## Quick Start
-
-[TODO: Essential usage instructions]
-
-### Python Dependencies
-
-If this skill includes Python scripts, use uv for package management:
-
-```bash
-# Add packages
-uv add package-name
-
-# Run scripts 
-uv run scripts/{skill_name}_helper.py <input>
-```
-
-## Resources
-
-- scripts/ - Executable utilities (use `uv run` to execute)
-- references/ - Detailed documentation 
-- assets/ - Templates and files for output
-
-Delete unused directories and update this documentation.
-"""
-
-    @staticmethod
-    def create_helper_script(skill_name: str) -> str:
+    def create_helper_script(self, skill_name: str) -> str:
         """Generate example helper script."""
-        return f"""#!/usr/bin/env python3
-\"\"\"
-{skill_name.replace("-", " ").title()} Helper
+        title = skill_name.replace("-", " ").title()
+        template = self.load_template("helper_script.py.template")
+        return template.format(skill_name=skill_name, title=title)
 
-Example utility script. Customize or delete as needed.
-
-Setup dependencies:
-    uv init  # Initialize if needed
-    uv add requests pathlib  # Add required packages
-    
-Usage:
-    uv run {skill_name}_helper.py <input>
-\"\"\"
-
-import sys
-from pathlib import Path
-
-def main():
-    \"\"\"Main entry point.\"\"\"
-    if len(sys.argv) < 2:
-        print("Usage: uv run {skill_name}_helper.py <input>")
-        sys.exit(1)
-    
-    input_path = Path(sys.argv[1])
-    
-    if not input_path.exists():
-        print(f"❌ Input not found: {{input_path}}")
-        sys.exit(1)
-    
-    # TODO: Add your processing logic here
-    # If you need additional packages, add them with:
-    # uv add package-name
-    print(f"✅ Processed: {{input_path}}")
-
-if __name__ == "__main__":
-    main()
-"""
-
-    @staticmethod
-    def create_reference_doc() -> str:
+    def create_reference_doc(self) -> str:
         """Generate reference documentation template."""
-        return """# Reference Documentation
+        return self.load_template("reference.md.template")
 
-Detailed documentation for complex operations.
-Replace with actual reference content or delete if not needed.
-
-## Structure Examples
-
-- API reference with endpoints and examples
-- Workflow guides with step-by-step instructions  
-- Complex configuration examples
-- Troubleshooting guides
-
-Keep this focused and organized for easy reference.
-"""
-
-    @staticmethod
-    def create_asset_readme() -> str:
+    def create_asset_readme(self) -> str:
         """Generate asset directory explanation."""
-        return """# Asset Files
+        return self.load_template("asset_readme.md.template")
 
-Store templates, images, fonts, and other output files here.
-These files are used in the final output, not loaded into context.
+    def create_pyproject_toml(self, skill_name: str) -> str:
+        """Generate pyproject.toml for dependency management."""
+        template = self.load_template("pyproject.toml.template")
+        return template.format(skill_name=skill_name)
 
-## Examples
-- Templates: .pptx, .docx files
-- Images: .png, .jpg, .svg files  
-- Boilerplate: Project directories, starter code
-- Configuration: .json, .yaml files
-
-Replace this README with actual assets or delete if not needed.
-"""
+    def create_dependency_check_script(self, skill_name: str) -> str:
+        """Generate dependency check script."""
+        title = skill_name.replace("-", " ").title()
+        template = self.load_template("check_dependencies.py.template")
+        return template.format(title=title, skill_name=skill_name)
 
 
 class PathSelector:
@@ -212,7 +138,18 @@ class SkillCreator:
         skill_md = skill_dir / "SKILL.md"
         skill_md.write_text(self.template.create_skill_markdown(self.skill_name))
 
-        # Example script
+        # Python project configuration
+        pyproject_file = skill_dir / "pyproject.toml"
+        pyproject_file.write_text(self.template.create_pyproject_toml(self.skill_name))
+
+        # Dependency check script
+        deps_script = skill_dir / "scripts" / "check_dependencies.py"
+        deps_script.write_text(
+            self.template.create_dependency_check_script(self.skill_name)
+        )
+        deps_script.chmod(0o755)
+
+        # Example helper script
         script_file = skill_dir / "scripts" / f"{self.skill_name}_helper.py"
         script_file.write_text(self.template.create_helper_script(self.skill_name))
         script_file.chmod(0o755)

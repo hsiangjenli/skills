@@ -28,6 +28,7 @@ skill-name/
 ├── SKILL.md (required)
 │   ├── YAML frontmatter (name, description)
 │   └── Markdown instructions
+├── templates/        - Template files for skill generation
 └── Optional Resources
     ├── scripts/      - Executable code
     ├── references/   - Documentation for context
@@ -63,7 +64,20 @@ uv run scripts/init_skill.py my-skill-name --path ./custom/location
 
 ### 3. Add Resources (Optional)
 
+**Templates** (`templates/`): Template files used for skill generation
+- `skill.md.template` - Main SKILL.md template
+- `helper_script.py.template` - Python script template  
+- `reference.md.template` - Reference documentation template
+- `asset_readme.md.template` - Asset directory template
+- `pyproject.toml.template` - Python project configuration
+- `check_dependencies.py.template` - Dependency management script
+
 **Scripts** (`scripts/`): Executable code for deterministic tasks
+
+Each generated skill includes dependency management:
+- `pyproject.toml` - Defines required packages
+- `scripts/check_dependencies.py` - Checks and installs dependencies
+
 ```python
 #!/usr/bin/env python3
 def process_file(input_path):
@@ -71,10 +85,16 @@ def process_file(input_path):
     pass
 ```
 
-Use uv for Python dependency management:
+**Dependency Management Workflow:**
 ```bash
-uv add requests pandas  # Add packages
-uv run scripts/helper.py  # Execute scripts
+# First time or when dependencies change
+uv run scripts/check_dependencies.py --install
+
+# Before using any scripts
+uv run scripts/check_dependencies.py
+
+# Run scripts
+uv run scripts/helper.py
 ```
 
 **References** (`references/`): Detailed documentation loaded on-demand
@@ -125,6 +145,86 @@ uv run scripts/package_skill.py path/to/my-skill ./dist
 - Installation guides  
 - Auxiliary documentation
 - Only include files Claude needs to do the job
+
+**Note**: 
+- **Python skills**: Dependency management (pyproject.toml + check_dependencies.py) is automatically included for seamless setup
+- **Other language skills**: Include appropriate config files (package.json, Gemfile, go.mod, etc.) and setup instructions in SKILL.md to guide Claude on dependency management
+
+## Using Skills with Dependencies
+
+When Claude encounters a skill with scripts in any programming language:
+
+### General Dependency Management Principles
+
+**Always check for dependency files first:**
+- `pyproject.toml` (Python with uv/pip)
+- `package.json` (Node.js/JavaScript)
+- `Gemfile` (Ruby)
+- `go.mod` (Go)
+- `Cargo.toml` (Rust)  
+- `requirements.txt` (Python legacy)
+- `composer.json` (PHP)
+- `pom.xml`/`build.gradle` (Java/JVM)
+
+**Common dependency setup patterns:**
+```bash
+# Python (modern)
+uv run scripts/check_dependencies.py --install
+uv run scripts/script.py
+
+# Node.js
+npm install  # or yarn install, pnpm install
+npm run script
+
+# Ruby
+bundle install
+bundle exec ruby script.rb
+
+# Go
+go mod tidy
+go run script.go
+
+# Rust
+cargo build
+cargo run --bin script
+```
+
+### 1. Python Skills (Automated)
+```bash
+# Always run this before using Python skill scripts
+uv run scripts/check_dependencies.py --install
+```
+
+### 2. Other Language Skills (Manual Check)
+For non-Python skills, check the skill directory for:
+
+1. **Look for dependency files** (package.json, Gemfile, go.mod, etc.)
+2. **Check SKILL.md** for setup instructions
+3. **Run standard dependency commands** for that language
+4. **Follow any custom setup scripts** provided
+
+### 3. Standard Skill Usage Pattern
+```bash
+# Step 1: Navigate to skill directory
+cd path/to/skill
+
+# Step 2: Check for and install dependencies
+# (Language-specific command based on what files are present)
+
+# Step 3: Use skill scripts/tools
+# (Follow instructions in SKILL.md)
+```
+
+### 3. Troubleshooting Dependencies
+If dependency issues occur:
+```bash
+# Clean and reinstall
+rm -rf .venv
+uv sync --reinstall
+
+# Check specific package versions
+uv tree
+```
 
 ## Validation
 
