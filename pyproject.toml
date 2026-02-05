@@ -5,5 +5,11 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "pillow>=12.1.0",
     "pyyaml>=6.0.3",
+]
+
+[tool.uv.workspace]
+members = [
+    "skills/test-skill",
 ]
