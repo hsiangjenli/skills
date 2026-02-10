@@ -19,6 +19,8 @@ Universal code style guidelines that promote clean, maintainable, and readable c
 - One function should do one thing well
 - Prefer explicit code over implicit behavior
 - Avoid premature optimization
+- Write code, not documentation: minimize auxiliary files
+- Never use emoji in code or comments
 
 **Good:**
 ```python
@@ -120,6 +122,8 @@ class PayPalProcessor(PaymentProcessor):
 - Add complexity only when requirements demand it  
 - Prefer composition over inheritance
 - Avoid speculative generality
+- Question every abstraction: does it solve a real problem?
+- Resist the urge to make code "flexible" without concrete use cases
 
 **Good (simple and direct):**
 ```python
@@ -146,6 +150,38 @@ class ConfigurationManager:
         self.strategy = strategy
     # ... unnecessary abstractions for a simple config reader
 ```
+
+### 5. Minimize Documentation Files
+
+**Code should be self-documenting. Documentation is supplementary, not primary.**
+
+- Avoid creating multiple CHANGELOG, or summary files
+- Don't generate progress reports or status documents  
+- Keep documentation in code (docstrings, inline comments)
+- One README per project maximum
+- No emoji in any output files
+
+**Good:**
+```python
+def calculate_discount(price: float, customer_type: str) -> float:
+    """Calculate discount based on customer type.
+    
+    Args:
+        price: Original price
+        customer_type: One of 'regular', 'premium', 'vip'
+    
+    Returns:
+        Discounted price
+    """
+    discounts = {'regular': 0, 'premium': 0.1, 'vip': 0.2}
+    return price * (1 - discounts.get(customer_type, 0))
+```
+
+**Avoid:**
+- CHANGES.md documenting every modification
+- SUMMARY.md repeating what code already shows
+- Multiple README files at different levels
+- Using emoji for status indicators or decorative purposes
 
 ## Naming Conventions
 
@@ -242,10 +278,14 @@ def validate_email(email):
 
 ## Comments and Documentation
 
-- Write self-documenting code first
+**Write self-documenting code first. Documentation lives in the code.**
+
+- Code readability reduces documentation needs  
 - Comment the "why", not the "what"
-- Keep comments up-to-date
+- Keep comments up-to-date or remove them
 - Use docstrings for public APIs
+- Never use emoji in comments or documentation
+- Avoid creating separate documentation files
 
 **Good comments explain intent:**
 ```python
@@ -257,6 +297,19 @@ def fetch_user_data(user_id, max_retries=3):
 ```python
 # Increment counter by 1
 counter += 1
+```
+
+**Avoid emoji decorations:**
+```python
+# Bad: Don't do this
+# ✅ Success! This function works!
+# 🚀 Super fast implementation
+# ⚠️ Warning: Check this
+
+# Good: Clear, professional comments
+# Returns None if validation fails
+# Optimized for large datasets
+# Validates input before processing
 ```
 
 ## Testing Principles
@@ -288,3 +341,50 @@ def test_should_reject_user_with_invalid_email():
 - Does each component have a single, clear responsibility?
 - Would a new team member understand this code?
 - Am I building for current needs or speculative future needs?
+- Am I creating unnecessary documentation files?
+- Is my code simple enough to not need separate explanatory documents?
+
+## Output Guidelines
+
+**When generating or modifying code:**
+
+1. **Minimize file generation:**
+   - Create only essential code files
+   - Avoid generating summary or changelog files
+   - Don't create duplicate documentation
+
+2. **No emoji in output:**
+   - Code files: absolutely no emoji
+   - Comments: use plain text only
+   - Documentation: professional language only
+   - Log messages: text-based indicators only
+
+3. **Self-documenting code over documents:**
+   - Prefer clear naming over explanatory comments
+   - Prefer docstrings over separate API docs
+   - Prefer type hints over type documentation
+
+**Good output structure:**
+```
+project/
+├── src/
+│   ├── main.py          # Main code
+│   └── utils.py         # Helper functions
+├── tests/
+│   └── test_main.py     # Tests
+└── README.md            # One README only
+```
+
+**Avoid:**
+```
+project/
+├── src/
+│   ├── main.py
+│   └── utils.py
+├── docs/
+│   ├── CHANGES.md       # Unnecessary
+│   ├── SUMMARY.md       # Unnecessary
+│   └── API_GUIDE.md     # Unnecessary
+├── README.md
+└── NOTES.md             # Unnecessary
+```
