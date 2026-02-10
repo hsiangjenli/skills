@@ -13,17 +13,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
       - name: Copy .agents/skills to skills
         run: |
           rm -rf skills
           mkdir -p skills
           cp -r .agents/skills/* skills/
 
+      - name: Update README.md
+        run: python scripts/update_readme.py
+
       - name: Commit and push changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add skills/
+          git add skills/ README.md
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
