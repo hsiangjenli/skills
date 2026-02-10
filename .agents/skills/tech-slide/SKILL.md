@@ -152,17 +152,22 @@ color: navy
 
 :: content ::
 
+<div style="font-weight: bold">
+
 1. Background & Motivation
 2. Core Concepts
 3. Implementation Guide
 4. Best Practices
 5. Key Takeaways
+
+</div>
 ```
 
 **Rules:**
 - ✅ Use white/black background (NO color parameter)
 - ✅ Keep simple and clean - avoid excessive emojis
 - ✅ Number all sections consistently
+- ✅ Wrap in `<div style="font-weight: bold">` for bold styling
 - ❌ Don't use primary color background
 
 ### 3. Section Dividers (Full-Color)
@@ -178,22 +183,20 @@ color: navy  # Same primary color for ALL sections
 # Section: Core Concepts
 <hr>
 
-<div>
-
-<div style="opacity: 0.4">1. Background & Motivation</div>
-<div style="font-weight: bold">2. Core Concepts</div>
-<div style="opacity: 0.4">3. Implementation Guide</div>
-<div style="opacity: 0.4">4. Best Practices</div>
-<div style="opacity: 0.4">5. Key Takeaways</div>
-
-</div>
+1. <span style="opacity: 0.4">Background & Motivation</span>
+2. **Core Concepts**
+3. <span style="opacity: 0.4">Implementation Guide</span>
+4. <span style="opacity: 0.4">Best Practices</span>
+5. <span style="opacity: 0.4">Key Takeaways</span>
 ```
 
 **Rules:**
 - ✅ Use primary color (same for ALL sections)
+- ✅ Use ordered list (1. 2. 3.) for table of contents
 - ✅ Show full ToC with current section bold
-- ✅ Dim other sections with `opacity: 0.4`
+- ✅ Dim other sections with `<span style="opacity: 0.4">`
 - ✅ Keep section titles clean - no emojis
+- ❌ Don't wrap in `<div>` tags - use Markdown ordered lists
 - ❌ Don't rotate colors between sections
 
 ### 4. Content Slides (White/Black Background)
@@ -371,9 +374,10 @@ Brief description providing context.
 - List items
 ```
 
-**Option 2: CSS override (For minimal slides)**
+**Option 2: Global CSS (Place after first slide content)**
 ```md
 <style>
+/* Global styles - placed after first slide but applies to all slides */
 .slidev-layout h1 + p,
 .slidev-layout h1 + ul,
 .slidev-layout h1 + ol,
@@ -384,6 +388,11 @@ Brief description providing context.
 .slidev-layout h1 + .v-clicks,
 .slidev-layout h1 + .v-click {
   margin-top: 1.5rem !important;
+}
+
+/* Adjust list spacing if needed */
+:global(ul li), :global(ol li) {
+  margin-bottom: 0.5rem !important;
 }
 </style>
 ```
@@ -397,8 +406,9 @@ Brief description providing context.
 5. **3-5 major sections** - Stay focused on core objectives
 6. **Section dividers every 8-12 slides** - Prevent overload
 7. **Key Takeaways = 3-5 points** - Keep memorable
-8. **Use ToC pattern** - Show progress with bold/dimmed sections
+8. **Use ordered lists for section ToC** - Use Markdown lists (1. 2. 3.) with bold/opacity for progress
 9. **Include contact info** - On cover slide
+10. **Place global styles after first slide** - CSS applies to all slides when placed in `<style>` tag after cover content
 
 ## Complete Example
 

@@ -46,6 +46,11 @@ DESIGN PRINCIPLES:
 .slidev-layout h1 + .v-click {
   margin-top: 1.5rem !important;
 }
+
+/* Adjust list spacing if needed */
+:global(ul li), :global(ol li) {
+  margin-bottom: 0.5rem !important;
+}
 </style>
 
 ---
@@ -80,15 +85,11 @@ color: navy
 # Section: Background & Motivation
 <hr>
 
-<div>
-
-<div style="font-weight: bold">1. Background & Motivation</div>
-<div style="opacity: 0.4">2. Core Concepts</div>
-<div style="opacity: 0.4">3. Implementation Guide</div>
-<div style="opacity: 0.4">4. Best Practices</div>
-<div style="opacity: 0.4">5. Key Takeaways</div>
-
-</div>
+1. **Background & Motivation**
+2. <span style="opacity: 0.4">Core Concepts</span>
+3. <span style="opacity: 0.4">Implementation Guide</span>
+4. <span style="opacity: 0.4">Best Practices</span>
+5. <span style="opacity: 0.4">Key Takeaways</span>
 
 ---
 layout: default
@@ -137,15 +138,11 @@ color: navy
 # Section: Core Concepts
 <hr>
 
-<div>
-
-<div style="opacity: 0.4">1. Background & Motivation</div>
-<div style="font-weight: bold">2. Core Concepts</div>
-<div style="opacity: 0.4">3. Implementation Guide</div>
-<div style="opacity: 0.4">4. Best Practices</div>
-<div style="opacity: 0.4">5. Key Takeaways</div>
-
-</div>
+1. <span style="opacity: 0.4">Background & Motivation</span>
+2. **Core Concepts**
+3. <span style="opacity: 0.4">Implementation Guide</span>
+4. <span style="opacity: 0.4">Best Practices</span>
+5. <span style="opacity: 0.4">Key Takeaways</span>
 
 ---
 layout: default
@@ -201,15 +198,11 @@ color: navy
 # Section: Implementation Guide
 <hr>
 
-<div>
-
-<div style="opacity: 0.4">1. Background & Motivation</div>
-<div style="opacity: 0.4">2. Core Concepts</div>
-<div style="font-weight: bold">3. Implementation Guide</div>
-<div style="opacity: 0.4">4. Best Practices</div>
-<div style="opacity: 0.4">5. Key Takeaways</div>
-
-</div>
+1. <span style="opacity: 0.4">Background & Motivation</span>
+2. <span style="opacity: 0.4">Core Concepts</span>
+3. **Implementation Guide**
+4. <span style="opacity: 0.4">Best Practices</span>
+5. <span style="opacity: 0.4">Key Takeaways</span>
 
 ---
 layout: default
@@ -308,15 +301,11 @@ color: navy
 # Section: Best Practices
 <hr>
 
-<div>
-
-<div style="opacity: 0.4">1. Background & Motivation</div>
-<div style="opacity: 0.4">2. Core Concepts</div>
-<div style="opacity: 0.4">3. Implementation Guide</div>
-<div style="font-weight: bold">4. Best Practices</div>
-<div style="opacity: 0.4">5. Key Takeaways</div>
-
-</div>
+1. <span style="opacity: 0.4">Background & Motivation</span>
+2. <span style="opacity: 0.4">Core Concepts</span>
+3. <span style="opacity: 0.4">Implementation Guide</span>
+4. **Best Practices**
+5. <span style="opacity: 0.4">Key Takeaways</span>
 
 ---
 layout: two-cols-title
