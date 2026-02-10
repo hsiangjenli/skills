@@ -54,6 +54,15 @@
       "skillFolderHash": "1c4d2991e4d798c2a0c384ed36863f958f0f467c",
       "installedAt": "2026-02-05T03:18:52.843Z",
       "updatedAt": "2026-02-05T05:47:23.000Z"
+    },
+    "tech-slide": {
+      "source": "hsiangjenli/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/hsiangjenli/skills.git",
+      "skillPath": "skills/tech-slide/SKILL.md",
+      "skillFolderHash": "066b49e6a72c1f90b30f6920dd794c66b794a1c5",
+      "installedAt": "2026-02-10T06:14:50.866Z",
+      "updatedAt": "2026-02-10T06:14:50.866Z"
     }
   },
   "dismissed": {
