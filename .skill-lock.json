@@ -65,7 +65,6 @@
     "gemini-cli",
     "github-copilot",
     "kimi-cli",
-    "opencode",
-    "replit"
+    "opencode"
   ]
 }
