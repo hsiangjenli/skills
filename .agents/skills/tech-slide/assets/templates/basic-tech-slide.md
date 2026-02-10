@@ -4,34 +4,6 @@ colorSchema: light
 title: Introduction to [Your Topic]
 author: Your Name
 email: your.email@example.com
----
-
-<style>
-/* Ensure consistent spacing after h1 regardless of following element type */
-.slidev-layout h1 + p,
-.slidev-layout h1 + ul,
-.slidev-layout h1 + ol,
-.slidev-layout h1 + pre,
-.slidev-layout h1 + blockquote,
-.slidev-layout h1 + table,
-.slidev-layout h1 + div,
-.slidev-layout h1 + .v-clicks,
-.slidev-layout h1 + .v-click {
-  margin-top: 1.5rem !important;
-}
-</style>
-
-<!--
-TECH-SLIDE TEMPLATE
-Complete example following tech-slide patterns
-
-COLOR SCHEME: Navy (Primary) + Light Mode
-- Full-color slides: Cover, Sections, Key Takeaways (navy/navy-light)
-- Content slides: White background (no color)
-- Accents: Navy for highlights and callouts
--->
-
----
 layout: intro
 color: navy
 ---
@@ -44,6 +16,37 @@ color: navy
 
 :: note ::
 Last updated: 2026-02-09
+
+<!--
+TECH-SLIDE TEMPLATE
+Complete example following tech-slide patterns
+
+COLOR SCHEME: Navy (Primary) + Light Mode
+- Full-color slides: Cover, Sections, Key Takeaways (navy/navy-light)
+- Content slides: White background (no color)
+- Accents: Navy for highlights and callouts
+
+DESIGN PRINCIPLES:
+- Keep slides simple and minimal
+- Avoid excessive emojis (use sparingly, only when adding value)
+- No emojis in section titles - keep headers professional
+- Focus on content over decoration
+-->
+
+<style>
+/* Global styles - placed after first slide but applies to all slides */
+.slidev-layout h1 + p,
+.slidev-layout h1 + ul,
+.slidev-layout h1 + ol,
+.slidev-layout h1 + pre,
+.slidev-layout h1 + blockquote,
+.slidev-layout h1 + table,
+.slidev-layout h1 + div,
+.slidev-layout h1 + .v-clicks,
+.slidev-layout h1 + .v-click {
+  margin-top: 1.5rem !important;
+}
+</style>
 
 ---
 layout: side-title
@@ -59,11 +62,15 @@ color: navy
 
 :: content ::
 
-1. 📚 Background & Motivation
-2. 🔧 Core Concepts
-3. 💻 Implementation Guide
-4. 🎯 Best Practices
-5. 🔑 Key Takeaways
+<div style="font-weight: bold">
+
+1. Background & Motivation
+2. Core Concepts
+3. Implementation Guide
+4. Best Practices
+5. Key Takeaways
+
+</div>
 
 ---
 layout: section
@@ -75,11 +82,11 @@ color: navy
 
 <div>
 
-<div style="font-weight: bold">1. 📚 Background & Motivation</div>
-<div style="opacity: 0.4">2. 🔧 Core Concepts</div>
-<div style="opacity: 0.4">3. 💻 Implementation Guide</div>
-<div style="opacity: 0.4">4. 🎯 Best Practices</div>
-<div style="opacity: 0.4">5. 🔑 Key Takeaways</div>
+<div style="font-weight: bold">1. Background & Motivation</div>
+<div style="opacity: 0.4">2. Core Concepts</div>
+<div style="opacity: 0.4">3. Implementation Guide</div>
+<div style="opacity: 0.4">4. Best Practices</div>
+<div style="opacity: 0.4">5. Key Takeaways</div>
 
 </div>
 
@@ -132,11 +139,11 @@ color: navy
 
 <div>
 
-<div style="opacity: 0.4">1. 📚 Background & Motivation</div>
-<div style="font-weight: bold">2. 🔧 Core Concepts</div>
-<div style="opacity: 0.4">3. 💻 Implementation Guide</div>
-<div style="opacity: 0.4">4. 🎯 Best Practices</div>
-<div style="opacity: 0.4">5. 🔑 Key Takeaways</div>
+<div style="opacity: 0.4">1. Background & Motivation</div>
+<div style="font-weight: bold">2. Core Concepts</div>
+<div style="opacity: 0.4">3. Implementation Guide</div>
+<div style="opacity: 0.4">4. Best Practices</div>
+<div style="opacity: 0.4">5. Key Takeaways</div>
 
 </div>
 
@@ -196,11 +203,11 @@ color: navy
 
 <div>
 
-<div style="opacity: 0.4">1. 📚 Background & Motivation</div>
-<div style="opacity: 0.4">2. 🔧 Core Concepts</div>
-<div style="font-weight: bold">3. 💻 Implementation Guide</div>
-<div style="opacity: 0.4">4. 🎯 Best Practices</div>
-<div style="opacity: 0.4">5. 🔑 Key Takeaways</div>
+<div style="opacity: 0.4">1. Background & Motivation</div>
+<div style="opacity: 0.4">2. Core Concepts</div>
+<div style="font-weight: bold">3. Implementation Guide</div>
+<div style="opacity: 0.4">4. Best Practices</div>
+<div style="opacity: 0.4">5. Key Takeaways</div>
 
 </div>
 
@@ -303,11 +310,11 @@ color: navy
 
 <div>
 
-<div style="opacity: 0.4">1. 📚 Background & Motivation</div>
-<div style="opacity: 0.4">2. 🔧 Core Concepts</div>
-<div style="opacity: 0.4">3. 💻 Implementation Guide</div>
-<div style="font-weight: bold">4. 🎯 Best Practices</div>
-<div style="opacity: 0.4">5. 🔑 Key Takeaways</div>
+<div style="opacity: 0.4">1. Background & Motivation</div>
+<div style="opacity: 0.4">2. Core Concepts</div>
+<div style="opacity: 0.4">3. Implementation Guide</div>
+<div style="font-weight: bold">4. Best Practices</div>
+<div style="opacity: 0.4">5. Key Takeaways</div>
 
 </div>
 
@@ -377,7 +384,7 @@ Avoid these common mistakes when implementing your solution.
 layout: default
 ---
 
-# 🔑 Key Takeaways
+# Key Takeaways
 
 Main learnings from this presentation:
 
@@ -394,7 +401,7 @@ color: navy
 
 <div style="text-align: center">
 
-# Thank You! 🎉
+# Thank You!
 
 <!-- Optional: Add QR Code for survey/feedback
 <div style="margin-top: 3rem; display: flex; flex-direction: column; align-items: center">
