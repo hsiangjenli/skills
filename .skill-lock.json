@@ -33,9 +33,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/hsiangjenli/skills.git",
       "skillPath": "skills/skill-creator/SKILL.md",
-      "skillFolderHash": "5950d55f1bfa763f935f857156a290f1ee252556",
+      "skillFolderHash": "bfbadaccb8e33743e77c8bd8c1bd69ea929d82c9",
       "installedAt": "2026-02-05T03:18:52.594Z",
-      "updatedAt": "2026-02-05T05:47:23.000Z"
+      "updatedAt": "2026-02-10T08:25:14.089Z"
     },
     "python": {
       "source": "hsiangjenli/skills",
@@ -60,9 +60,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/hsiangjenli/skills.git",
       "skillPath": "skills/tech-slide/SKILL.md",
-      "skillFolderHash": "066b49e6a72c1f90b30f6920dd794c66b794a1c5",
+      "skillFolderHash": "0d27d4e9234a5f3dda845d22a33ed5d7037eaf16",
       "installedAt": "2026-02-10T06:14:50.866Z",
-      "updatedAt": "2026-02-10T06:14:50.866Z"
+      "updatedAt": "2026-02-10T08:25:17.725Z"
     }
   },
   "dismissed": {
