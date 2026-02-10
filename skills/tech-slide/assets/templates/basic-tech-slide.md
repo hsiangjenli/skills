@@ -47,9 +47,10 @@ DESIGN PRINCIPLES:
   margin-top: 1.5rem !important;
 }
 
-:global(ul li), :global(ol li) {  
-  margin-bottom: 0.5rem !important;  
-}  
+/* Adjust list spacing if needed */
+:global(ul li), :global(ol li) {
+  margin-bottom: 0.5rem !important;
+}
 </style>
 
 ---
@@ -58,7 +59,6 @@ side: l
 align: lm-lm
 colorSchema: light
 color: navy
-# NO COLOR - white background for ToC
 ---
 
 :: title ::
@@ -92,6 +92,7 @@ color: navy
 
 ---
 layout: default
+# NO COLOR - white background for content
 ---
 
 # Why This Topic Matters
@@ -145,6 +146,7 @@ color: navy
 
 ---
 layout: default
+# NO COLOR - white background for content
 ---
 
 # Fundamental Principle #1
@@ -168,6 +170,7 @@ def example_function():
 
 ---
 layout: two-cols-title
+# NO COLOR - white background for content
 ---
 
 :: title ::
@@ -205,6 +208,7 @@ color: navy
 
 ---
 layout: default
+# NO COLOR - white background for content
 ---
 
 # Step 1: Environment Setup
@@ -230,6 +234,7 @@ pip install package-name
 
 ---
 layout: two-cols-title
+# NO COLOR - white background for content
 ---
 
 :: title ::
@@ -262,6 +267,7 @@ class Example:
 
 ---
 layout: default
+# NO COLOR - white background for content
 ---
 
 # Step 3: Advanced Usage
@@ -308,6 +314,7 @@ color: navy
 
 ---
 layout: two-cols-title
+# NO COLOR - white background for content
 ---
 
 :: title ::
@@ -329,6 +336,7 @@ layout: two-cols-title
 
 ---
 layout: default
+# NO COLOR - white background for content
 ---
 
 # Performance Considerations
@@ -356,6 +364,7 @@ def expensive_operation(data):
 
 ---
 layout: default
+# NO COLOR - white background for content
 ---
 
 # Common Pitfalls
@@ -370,6 +379,7 @@ Avoid these common mistakes when implementing your solution.
 
 ---
 layout: default
+# NO COLOR - white background for content
 ---
 
 # Key Takeaways

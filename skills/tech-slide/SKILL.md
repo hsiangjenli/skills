@@ -134,7 +134,7 @@ Last updated: 2026-02-09
 - ✅ Include title, author, email
 - ❌ Don't use white/black background
 
-### 2. Table of Contents (White/Black Background)
+### 2. Table of Contents (Full-Color)
 
 Overview of all sections. Use slide separator for second slide onwards.
 
@@ -144,7 +144,7 @@ layout: side-title
 side: l
 align: lm-lm
 colorSchema: light
-color: navy
+color: navy  # Use primary color
 ---
 
 :: title ::
@@ -164,11 +164,10 @@ color: navy
 ```
 
 **Rules:**
-- ✅ Use white/black background (NO color parameter)
+- ✅ Use primary color (same as cover and sections)
 - ✅ Keep simple and clean - avoid excessive emojis
 - ✅ Number all sections consistently
 - ✅ Wrap in `<div style="font-weight: bold">` for bold styling
-- ❌ Don't use primary color background
 
 ### 3. Section Dividers (Full-Color)
 
@@ -301,11 +300,11 @@ color: navy  # Primary color
 
 ### Full-Color Slides (Use Primary Color)
 - **Cover** - `layout: intro` + `color: navy`
+- **Table of Contents** - `layout: side-title` + `color: navy`
 - **Section Dividers** - `layout: section` + `color: navy`
 - **Thank You** - `layout: section` + `color: navy`
 
 ### White/Black Background (NO Color)
-- **Table of Contents** - `layout: side-title` (no color)
 - **All Content Slides** - `layout: default` or `two-cols-title` (no color)
 - **Key Takeaways** - `layout: default` (no color)
 
