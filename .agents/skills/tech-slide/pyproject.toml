@@ -3,18 +3,10 @@ name = "tech-slide"
 version = "0.1.0"
 description = "TODO: Brief description of this skill"
 requires-python = ">=3.8"
-dependencies = [
-    # Add required packages here, e.g.:
-    # "requests>=2.25.0",
-    # "pandas>=1.3.0",
-]
+dependencies = []
 
 [project.optional-dependencies]
 dev = [
     "pytest>=6.0",
     "ruff>=0.1.0",
 ]
-
-# Optional: Add entry points if your skill provides CLI commands
-# [project.scripts]  
-# my-command = "tech-slide.main:cli"
