@@ -1,0 +1,45 @@
+{
+  "version": 3,
+  "skills": {
+    "code-styleguide": {
+      "source": "hsiangjenli/skills",
+      "sourceType": "github",
+      "computedHash": "0ec763f13b93827aca933bd81daaec9a9ab976200d640dcb0ea4c7360ffcd247"
+    },
+    "find-skills": {
+      "source": "hsiangjenli/skills",
+      "sourceType": "github",
+      "computedHash": "6412eb4eb3b91595ebab937f0c69501240e7ba761b3d82510b5cf506ec5c7adc"
+    },
+    "python": {
+      "source": "hsiangjenli/skills",
+      "sourceType": "github",
+      "computedHash": "e63470b813af23146a363e10ee166206e053693129a1fcd3ee4f7dfc5f1d9d1a"
+    },
+    "remotion-best-practices": {
+      "source": "remotion-dev/skills",
+      "sourceType": "github",
+      "computedHash": "9851afb52e1b892c43b2af973bda1776ce01fedfdfe704e0cfd70069a3a9c300"
+    },
+    "skill-creator": {
+      "source": "hsiangjenli/skills",
+      "sourceType": "github",
+      "computedHash": "e2584551e76e74e8526894d22f064207f6bef87bbb1c5bbd654c4d9ab43040e2"
+    },
+    "slidev": {
+      "source": "slidevjs/slidev",
+      "sourceType": "github",
+      "computedHash": "90b30aaa3eed14790462c2124d12615a945501ed86205c5c0c2606def70a4c83"
+    },
+    "slidev-theme-neversink": {
+      "source": "hsiangjenli/skills",
+      "sourceType": "github",
+      "computedHash": "c0b2e15218cca52b69d0fda9abc97e4bebd059da088a43d2cb7b362529aec238"
+    },
+    "tech-slide": {
+      "source": "hsiangjenli/skills",
+      "sourceType": "github",
+      "computedHash": "c513978a9aaa333f251811e8460f5a50d3761a1d08dbe4ac499dcc5e7f3f214f"
+    }
+  }
+}
