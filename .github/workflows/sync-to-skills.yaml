@@ -13,19 +13,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
 
-      - name: Copy .agents/skills to skills
-        run: |
-          rm -rf skills
-          mkdir -p skills
-          cp -r .agents/skills/* skills/
+      - name: Sync skills from specified source
+        run: uv run scripts/sync_to_skills.py --source hsiangjenli/skills
 
       - name: Update README.md
-        run: python scripts/update_readme.py
+        run: uv run scripts/update_readme.py
 
       - name: Commit and push changes
         run: |
@@ -35,7 +30,7 @@ jobs:
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "chore(auto): update skills from .agents/skills"
+            git commit -m "chore(auto): update custom skills from .agents/skills"
             git push
           fi
         env:
