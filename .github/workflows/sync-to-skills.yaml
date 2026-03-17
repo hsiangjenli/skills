@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - ".agents/skills/**"
+      - "scripts/**"
 
 jobs:
   release:
