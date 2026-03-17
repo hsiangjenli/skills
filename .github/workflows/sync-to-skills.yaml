@@ -4,8 +4,8 @@ on:
   push:
     paths:
       - ".agents/skills/**"
-      - "scripts/**"
       - ".github/workflows/**"
+      - "scripts/**"
 
 jobs:
   release:
