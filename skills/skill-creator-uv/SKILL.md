@@ -1,6 +1,6 @@
 ---
-name: skill-creator
-description: Guide for creating effective skills. Use when users want to create a new skill or update an existing skill that extends Claude's capabilities with specialized knowledge, workflows, or tool integrations.
+name: skill-creator-uv
+description: Create new Python-based skills using uv for project management. Use when users want to create a new skill or update an existing skill that includes Python scripts managed with uv, ruff, pytest, and mypy.
 license: Complete terms in LICENSE.txt
 ---
 

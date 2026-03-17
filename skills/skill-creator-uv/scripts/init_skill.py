@@ -11,6 +11,7 @@ Examples:
     uv run init_skill.py my-skill --non-interactive
 """
 
+import subprocess
 import sys
 from pathlib import Path
 import argparse
@@ -134,13 +135,30 @@ class SkillCreator:
 
     def create_files(self, skill_dir: Path) -> None:
         """Create skill files."""
+        # Initialize Python project with uv (creates pyproject.toml, .python-version)
+        subprocess.run(
+            ["uv", "init", "--no-readme", str(skill_dir)],
+            check=True,
+            capture_output=True,
+        )
+
+        # Remove default entry file created by uv init
+        for default_file in ["main.py", "hello.py"]:
+            f = skill_dir / default_file
+            if f.exists():
+                f.unlink()
+
+        # Add standard Python dev dependencies
+        subprocess.run(
+            ["uv", "add", "--dev", "ruff", "pytest", "mypy"],
+            cwd=skill_dir,
+            check=True,
+            capture_output=True,
+        )
+
         # Main skill file
         skill_md = skill_dir / "SKILL.md"
         skill_md.write_text(self.template.create_skill_markdown(self.skill_name))
-
-        # Python project configuration
-        pyproject_file = skill_dir / "pyproject.toml"
-        pyproject_file.write_text(self.template.create_pyproject_toml(self.skill_name))
 
         # Dependency check script
         deps_script = skill_dir / "scripts" / "check_dependencies.py"

@@ -44,7 +44,42 @@ When developing this skill, add new packages to `pyproject.toml`:
 uv add package-name
 
 # Add development dependency  
-uv add --dev pytest ruff
+uv add --dev pytest ruff mypy
+```
+
+## Code Quality
+
+```bash
+# Format code
+uv run ruff format .
+
+# Lint and auto-fix
+uv run ruff check . --fix
+
+# Type check
+uv run mypy scripts/
+
+# Run tests
+uv run pytest
+```
+
+Use numpy-style docstrings for all functions:
+
+```python
+def my_function(param: str) -> str:
+    """
+    Brief one-line description.
+
+    Parameters
+    ----------
+    param : str
+        Description of the parameter.
+
+    Returns
+    -------
+    str
+        Description of the return value.
+    """
 ```
 
 ## Resources
