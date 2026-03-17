@@ -71,7 +71,7 @@ def sync_skills(
     if target_dir.exists():
         print(f"Removing old {target_dir} directory...")
         shutil.rmtree(target_dir)
-    
+
     # Create fresh target directory
     target_dir.mkdir(parents=True, exist_ok=True)
 
