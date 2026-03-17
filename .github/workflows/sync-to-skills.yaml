@@ -20,7 +20,7 @@ jobs:
         run: uv run scripts/sync_to_skills.py --source hsiangjenli/skills
 
       - name: Update README.md
-        run: uv run scripts/update_readme.py
+        run: uv run scripts/update_readme.py --source hsiangjenli/skills
 
       - name: Commit and push changes
         run: |

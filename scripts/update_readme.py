@@ -3,6 +3,8 @@
 Update README.md with skills list from .agents/skills directory.
 """
 
+import argparse
+import json
 import re
 from pathlib import Path
 
@@ -44,7 +46,53 @@ def parse_skill_frontmatter(skill_md_path: Path) -> dict:
         return {"name": "", "description": ""}
 
 
-def generate_skills_table(skills_dir: Path) -> str:
+def load_skills_lock(skills_lock_path: Path) -> dict:
+    """
+    Load skills-lock.json file.
+
+    Parameters
+    ----------
+    skills_lock_path : Path
+        Path to skills-lock.json file
+
+    Returns
+    -------
+    dict
+        The parsed skills-lock data
+    """
+    with open(skills_lock_path, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def filter_skills_by_source(skills_data: dict, target_source: str) -> list[str]:
+    """
+    Filter skills by source.
+
+    Parameters
+    ----------
+    skills_data : dict
+        The skills dictionary from skills-lock.json
+    target_source : str
+        The source to filter by (e.g., "hsiangjenli/skills")
+
+    Returns
+    -------
+    list[str]
+        List of skill names that match the target source
+    """
+    filtered_skills = []
+    skills = skills_data.get("skills", {})
+
+    for skill_name, skill_info in skills.items():
+        if skill_info.get("source") == target_source:
+            filtered_skills.append(skill_name)
+
+    return filtered_skills
+
+
+def generate_skills_table(
+    skills_dir: Path, allowed_skills: list[str] | None = None
+) -> str:
     """
     Generate markdown table of skills.
 
@@ -52,6 +100,8 @@ def generate_skills_table(skills_dir: Path) -> str:
     ----------
     skills_dir : Path
         Path to .agents/skills directory
+    allowed_skills : list[str] | None
+        If provided, only include skills whose directory name is in this list.
 
     Returns
     -------
@@ -63,6 +113,9 @@ def generate_skills_table(skills_dir: Path) -> str:
     # Scan all subdirectories in .agents/skills
     for skill_dir in sorted(skills_dir.iterdir()):
         if not skill_dir.is_dir():
+            continue
+
+        if allowed_skills is not None and skill_dir.name not in allowed_skills:
             continue
 
         skill_md = skill_dir / "SKILL.md"
@@ -105,19 +158,52 @@ def update_readme(readme_path: Path, skills_table: str):
 
 def main():
     """Main execution function."""
+    parser = argparse.ArgumentParser(
+        description="Update README.md with skills table, optionally filtered by source"
+    )
+    parser.add_argument(
+        "--source",
+        default=None,
+        help="Source to filter by (e.g., hsiangjenli/skills). If omitted, all skills are included.",
+    )
+    parser.add_argument(
+        "--skills-lock",
+        default="skills-lock.json",
+        help="Path to skills-lock.json",
+    )
+    parser.add_argument(
+        "--source-dir",
+        default=".agents/skills",
+        help="Source directory path",
+    )
+    args = parser.parse_args()
+
     # Get repository root
     repo_root = Path(__file__).parent.parent
 
     # Paths
-    skills_dir = repo_root / ".agents" / "skills"
+    skills_dir = repo_root / args.source_dir
     readme_path = repo_root / "README.md"
+    skills_lock_path = repo_root / args.skills_lock
 
     if not skills_dir.exists():
         print(f"Error: {skills_dir} does not exist")
         return
 
+    # Optionally filter by source
+    allowed_skills = None
+    if args.source:
+        if not skills_lock_path.exists():
+            print(f"Error: {skills_lock_path} does not exist")
+            return
+        skills_data = load_skills_lock(skills_lock_path)
+        allowed_skills = filter_skills_by_source(skills_data, args.source)
+        print(
+            f"Filtering by source '{args.source}': {len(allowed_skills)} skills matched"
+        )
+
     # Generate and update
-    skills_table = generate_skills_table(skills_dir)
+    skills_table = generate_skills_table(skills_dir, allowed_skills)
     update_readme(readme_path, skills_table)
 
     print(f"Found {len(skills_table.split(chr(10))) - 2} skills")
