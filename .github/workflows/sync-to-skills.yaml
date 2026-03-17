@@ -5,6 +5,7 @@ on:
     paths:
       - ".agents/skills/**"
       - "scripts/**"
+      - ".github/workflows/**"
 
 jobs:
   release:
