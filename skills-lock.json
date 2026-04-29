@@ -4,46 +4,61 @@
     "code-styleguide": {
       "source": "hsiangjenli/skills",
       "sourceType": "github",
+      "skillPath": "skills/code-styleguide/SKILL.md",
       "computedHash": "0ec763f13b93827aca933bd81daaec9a9ab976200d640dcb0ea4c7360ffcd247"
     },
     "find-skills": {
       "source": "vercel-labs/skills",
       "sourceType": "github",
-      "computedHash": "d31e234f0c90694a670222cdd1dafa853e051d7066beda389f1097c22dadd461"
+      "skillPath": "skills/find-skills/SKILL.md",
+      "computedHash": "9e1c8b3103f92fa8092568a44fe64858de7c5c9dc65ce4bea8f168080e889cfd"
+    },
+    "mise": {
+      "source": "hsiangjenli/skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/mise/SKILL.md",
+      "computedHash": "1f7fd94d5c6d0e476d1627393e1bd460b2b236b06647f3db2222a2fe51b5f3cd"
     },
     "python": {
       "source": "hsiangjenli/skills",
       "sourceType": "github",
-      "computedHash": "e63470b813af23146a363e10ee166206e053693129a1fcd3ee4f7dfc5f1d9d1a"
+      "skillPath": "skills/python/SKILL.md",
+      "computedHash": "27753573102b52088f5ac483ad7086e93e6633d8438dc92c5ac647a9143b6153"
     },
     "remotion-best-practices": {
       "source": "remotion-dev/skills",
       "sourceType": "github",
-      "computedHash": "9851afb52e1b892c43b2af973bda1776ce01fedfdfe704e0cfd70069a3a9c300"
+      "skillPath": "skills/remotion/SKILL.md",
+      "computedHash": "df654933e451556147e384078c3fbdbac997cb0fe4d2f2db7642000c239304c5"
     },
     "skill-creator": {
       "source": "anthropics/skills",
       "sourceType": "github",
-      "computedHash": "b122f4d1e91aa1d83027e050b5b37c3156203ee85458d7b1360bc48167c9e02a"
+      "skillPath": "skills/skill-creator/SKILL.md",
+      "computedHash": "5ea13a6d9f0d4bb694405d79acd00cadec0d21bb138c4dd10fcf3c500cb835c2"
     },
     "skill-creator-uv": {
       "source": "hsiangjenli/skills",
       "sourceType": "github",
-      "computedHash": "e2584551e76e74e8526894d22f064207f6bef87bbb1c5bbd654c4d9ab43040e2"
+      "skillPath": "skills/skill-creator-uv/SKILL.md",
+      "computedHash": "c64ba4d1f0848ebff51d400511c682440cffd143cef4376e2d2e21d5c9b0d829"
     },
     "slidev": {
       "source": "slidevjs/slidev",
       "sourceType": "github",
-      "computedHash": "90b30aaa3eed14790462c2124d12615a945501ed86205c5c0c2606def70a4c83"
+      "skillPath": "skills/slidev/SKILL.md",
+      "computedHash": "a495cfada5d3b29c66c2fbbccb4ef9887d6b12bd7e440d100deea89e529c1a7b"
     },
     "slidev-theme-neversink": {
       "source": "hsiangjenli/skills",
       "sourceType": "github",
+      "skillPath": "skills/slidev-theme-neversink/SKILL.md",
       "computedHash": "c0b2e15218cca52b69d0fda9abc97e4bebd059da088a43d2cb7b362529aec238"
     },
     "tech-slide": {
       "source": "hsiangjenli/skills",
       "sourceType": "github",
+      "skillPath": "skills/tech-slide/SKILL.md",
       "computedHash": "c513978a9aaa333f251811e8460f5a50d3761a1d08dbe4ac499dcc5e7f3f214f"
     }
   }
