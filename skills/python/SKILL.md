@@ -1,13 +1,26 @@
 ---
 name: python
-description: Modern Python development workflow using uv for project management, code formatting, docstring generation with numpy style, and code optimization. Use when creating new Python projects, formatting code, optimizing existing Python code, managing dependencies, or setting up development environments.
+description: Modern Python development workflow where ALL Python execution goes through uv run — never call python, pip, or pytest directly. Use this skill whenever the user writes, runs, formats, tests, or packages Python code, sets up a Python project, or asks how to execute any Python script or command. Always enforce uv run for execution and uv add/remove for dependency management.
 ---
 
 # Python Development with uv
 
+## Non-Negotiable Rule
+
+Never call `python`, `pip`, `pytest`, `ruff`, or `mypy` directly. Always prefix with `uv run`.
+
+| Wrong | Correct |
+|-------|---------|
+| `python script.py` | `uv run python script.py` |
+| `python -m pytest` | `uv run pytest` |
+| `pip install requests` | `uv add requests` |
+| `pytest` | `uv run pytest` |
+| `ruff format .` | `uv run ruff format .` |
+| `mypy src/` | `uv run mypy src/` |
+
 ## Overview
 
-This skill provides a complete modern Python development workflow using uv for fast project management, code formatting with ruff, numpy-style docstring generation, and code quality assurance.
+This skill provides a complete modern Python development workflow using uv. Every Python command runs through `uv run`; every package change goes through `uv add` or `uv remove`.
 
 ## Project Initialization
 
@@ -215,6 +228,27 @@ uv run pytest
 # One-command quality check
 uv run ruff format . && uv run ruff check . --fix && uv run mypy src/ && uv run pytest
 ```
+
+## Executing Python Code
+
+Always use `uv run` to execute Python scripts, modules, and REPL:
+
+```bash
+# Run a script
+uv run script.py
+uv run src/main.py
+
+# Run a module
+uv run python -m mymodule
+
+# Pass arguments
+uv run script.py --input data.csv
+
+# One-off execution without changing project deps
+uv run --with httpx python fetch.py
+```
+
+Never use bare `python script.py` — this bypasses the project environment managed by uv.
 
 ## Common Patterns
 
