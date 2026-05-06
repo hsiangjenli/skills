@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
 import sys
 from collections import Counter, defaultdict
@@ -21,10 +22,22 @@ from urllib.request import urlopen
 from uuid import uuid4
 
 from dateutil.rrule import rrulestr
+from dotenv import load_dotenv
 from icalendar import Calendar, Event
 
 
 DEFAULT_RANGE_DAYS = 14
+
+
+def load_env() -> None:
+    """Load .env files from the current directory, then from ~/.config/ics-manager/.env.
+
+    Priority (highest to lowest): shell env > cwd .env > user config .env.
+    """
+    load_dotenv()  # cwd .env; override=False so shell vars are never overwritten
+    user_env = Path.home() / ".config" / "ics-manager" / ".env"
+    if user_env.exists():
+        load_dotenv(user_env)  # fallback for vars not yet set
 
 
 class IcsManagerError(Exception):
@@ -641,7 +654,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     def add_common_range_arguments(command_parser: argparse.ArgumentParser) -> None:
         command_parser.add_argument(
-            "--source", required=True, help="Local .ics path or HTTP(S) URL"
+            "--source",
+            default=os.environ.get("ICS_SOURCE"),
+            help="Local .ics path or HTTP(S) URL (default: $ICS_SOURCE)",
         )
         command_parser.add_argument(
             "--start", help="ISO date or datetime for range start"
@@ -680,7 +695,11 @@ def build_parser() -> argparse.ArgumentParser:
     summarize_parser.set_defaults(handler=summarize_hours)
 
     add_parser = subparsers.add_parser("add-event", help="Add a VEVENT to a local file")
-    add_parser.add_argument("--source", required=True, help="Local .ics file path")
+    add_parser.add_argument(
+        "--source",
+        default=os.environ.get("ICS_SOURCE"),
+        help="Local .ics file path (default: $ICS_SOURCE)",
+    )
     add_parser.add_argument("--summary", required=True, help="Event summary")
     add_parser.add_argument("--start", required=True, help="ISO date or datetime")
     add_parser.add_argument("--end", required=True, help="ISO date or datetime")
@@ -698,7 +717,11 @@ def build_parser() -> argparse.ArgumentParser:
     add_parser.set_defaults(handler=add_event)
 
     update_parser = subparsers.add_parser("update-event", help="Update a VEVENT by UID")
-    update_parser.add_argument("--source", required=True, help="Local .ics file path")
+    update_parser.add_argument(
+        "--source",
+        default=os.environ.get("ICS_SOURCE"),
+        help="Local .ics file path (default: $ICS_SOURCE)",
+    )
     update_parser.add_argument("--uid", required=True, help="Event UID")
     update_parser.add_argument("--summary", help="Updated summary")
     update_parser.add_argument("--start", help="Updated start")
@@ -724,7 +747,11 @@ def build_parser() -> argparse.ArgumentParser:
     update_parser.set_defaults(handler=update_event)
 
     delete_parser = subparsers.add_parser("delete-event", help="Delete a VEVENT by UID")
-    delete_parser.add_argument("--source", required=True, help="Local .ics file path")
+    delete_parser.add_argument(
+        "--source",
+        default=os.environ.get("ICS_SOURCE"),
+        help="Local .ics file path (default: $ICS_SOURCE)",
+    )
     delete_parser.add_argument("--uid", required=True, help="Event UID")
     delete_parser.add_argument(
         "--dry-run", action="store_true", help="Report without writing"
@@ -739,8 +766,16 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: Iterable[str] | None = None) -> int:
     """Run the CLI."""
+    load_env()
     parser = build_parser()
     args = parser.parse_args(list(argv) if argv is not None else None)
+
+    if getattr(args, "source", None) is None:
+        print(
+            "Error: --source is required. Set ICS_SOURCE in .env or pass --source explicitly.",
+            file=sys.stderr,
+        )
+        return 1
 
     try:
         return args.handler(args)

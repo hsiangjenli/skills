@@ -22,17 +22,40 @@ Use this skill when the task involves reading or editing `.ics` calendar files f
 This skill includes Python scripts managed by `uv`.
 
 ```bash
-cd .agents/skills/ics-manager
 uv run scripts/check_dependencies.py --install
 ```
+
+### Configuration
+
+Copy `.env.example` to `.env` in the directory where you run commands and fill in your calendar source.
+
+```bash
+cp .env.example .env
+```
+
+`.env` contents:
+
+```
+ICS_SOURCE=~/calendar/work.ics
+```
+
+Once set, every command picks up the source automatically without `--source`:
+
+```bash
+# No --source needed
+uv run scripts/ics_manager.py list-events
+uv run scripts/ics_manager.py overview
+```
+
+You can also place `.env` at `~/.config/ics-manager/.env` for a user-level default shared across projects.
+
+Priority order: shell environment variable > `.env` in current directory > `~/.config/ics-manager/.env`.
 
 ### Main Script
 
 All operations go through `scripts/ics_manager.py`.
 
 ```bash
-cd .agents/skills/ics-manager
-
 # List events in the next two weeks from a local file
 uv run scripts/ics_manager.py list-events --source ~/calendar/work.ics
 
@@ -126,4 +149,5 @@ When the user is shaping the workflow, verify these points if they matter:
 
 - `scripts/ics_manager.py` - Parse, summarize, and modify ICS files
 - `scripts/check_dependencies.py` - Verify and install dependencies
+- `.env.example` - Template for environment configuration
 - `references/workflows.md` - Prompt patterns, supported commands, and caveats
