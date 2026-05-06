@@ -6,6 +6,7 @@ on:
       - ".agents/skills/**"
       - ".github/workflows/**"
       - "scripts/**"
+      - "skills-lock.json"
 
 jobs:
   release:
