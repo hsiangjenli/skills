@@ -13,6 +13,12 @@
       "skillPath": "skills/find-skills/SKILL.md",
       "computedHash": "9e1c8b3103f92fa8092568a44fe64858de7c5c9dc65ce4bea8f168080e889cfd"
     },
+    "ics-manager": {
+      "source": "hsiangjenli/skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/ics-manager/SKILL.md",
+      "computedHash": "39e65bc036324f62e9cc89be40e80b02a7d80414cf8beebd3abfa66381420722"
+    },
     "mise": {
       "source": "hsiangjenli/skills",
       "sourceType": "github",
