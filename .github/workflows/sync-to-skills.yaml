@@ -20,7 +20,7 @@ jobs:
         uses: astral-sh/setup-uv@v5
 
       - name: Update README.md
-        run: uv run scripts/update_readme.py
+        run: uv run scripts/update_readme.py --source-dir skills
 
       - name: Commit and push changes
         run: |
