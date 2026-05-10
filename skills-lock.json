@@ -19,6 +19,12 @@
       "skillPath": ".agents/skills/ics-manager/SKILL.md",
       "computedHash": "39e65bc036324f62e9cc89be40e80b02a7d80414cf8beebd3abfa66381420722"
     },
+    "linkedin-about-writer": {
+      "source": "hsiangjenli/skills",
+      "sourceType": "github",
+      "skillPath": "skills/linkedin-about-writer/SKILL.md",
+      "computedHash": "021fb0dc9423b1d616895d8c5f6d81148cbdc1c383aa44ed707d194c31a3c55b"
+    },
     "mise": {
       "source": "hsiangjenli/skills",
       "sourceType": "github",
