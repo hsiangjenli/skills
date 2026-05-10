@@ -1,15 +1,15 @@
-name: Sync from .agents/skills to skills
+name: Update README
 
 on:
+  workflow_dispatch:
   push:
     paths:
-      - ".agents/skills/**"
-      - ".github/workflows/**"
+      - "skills/**"
       - "scripts/**"
-      - "skills-lock.json"
+      - ".github/workflows/**"
 
 jobs:
-  release:
+  update-readme:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,21 +19,18 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v5
 
-      - name: Sync skills from specified source
-        run: uv run scripts/sync_to_skills.py --source hsiangjenli/skills
-
       - name: Update README.md
-        run: uv run scripts/update_readme.py --source hsiangjenli/skills
+        run: uv run scripts/update_readme.py
 
       - name: Commit and push changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add skills/ README.md
+          git add README.md
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "chore(auto): update custom skills from .agents/skills"
+            git commit -m "chore(auto): update README from skill frontmatter"
             git push
           fi
         env:
