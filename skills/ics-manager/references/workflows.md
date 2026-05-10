@@ -28,20 +28,21 @@
 
 ## Recommended Defaults
 
-- Use a 14-day window when the user asks for "upcoming" meetings and no range is given.
+- Use the active configured sprint window when `ICS_RANGE_START` and `ICS_RANGE_DAYS` are set.
+- Otherwise use a 14-day window when the user asks for "upcoming" meetings and no range is given.
 - Use `--format json` when another tool or step needs structured output.
 - Keep backups enabled for local file mutations.
 - When the user asks for work hours, confirm whether all-day events should be included.
 
 ## Clarification Rules
 
-When the user asks for meetings over "these two weeks" (or equivalent phrasing in any language) without specifying a start date, always ask for clarification in the same language the user used:
+When the user asks for meetings over "these two weeks" (or equivalent phrasing in any language) without specifying a start date and no anchored range is configured, ask for clarification in the same language the user used:
 
 > Which start point did you mean for "two weeks"?
 > 1. From today (Today → Today + 13 days)
 > 2. From this Monday (This Monday → This Monday + 13 days)
 > 3. From a specific date (please provide the date)
 
-Do not assume a default and proceed — wait for the user to confirm before running any command.
+If an anchored sprint range is configured, do not ask again. Use the active configured window unless the user explicitly asks to override it.
 
 Always reply in the same language the user used in their request.

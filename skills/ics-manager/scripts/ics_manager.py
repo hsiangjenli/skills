@@ -27,6 +27,8 @@ from icalendar import Calendar, Event
 
 
 DEFAULT_RANGE_DAYS = 14
+RANGE_START_ENV_KEYS = ("ICS_RANGE_START", "ICS_SPRINT_START")
+RANGE_DAYS_ENV_KEYS = ("ICS_RANGE_DAYS", "ICS_SPRINT_DAYS")
 
 
 def load_env() -> None:
@@ -48,6 +50,7 @@ class IcsManagerError(Exception):
 class EventOccurrence:
     """Normalized event occurrence data."""
 
+    source: str
     uid: str
     summary: str
     start: datetime
@@ -70,6 +73,7 @@ class EventOccurrence:
     def to_dict(self) -> dict[str, Any]:
         """Serialize the occurrence to a JSON-safe dictionary."""
         return {
+            "source": self.source,
             "uid": self.uid,
             "summary": self.summary,
             "start": self.start.isoformat(),
@@ -120,6 +124,94 @@ def parse_range_boundary(value: str | None, fallback: datetime) -> datetime:
     if value is None:
         return fallback
     return normalize_datetime(parse_user_temporal(value))
+
+
+def first_env_value(keys: Iterable[str]) -> str | None:
+    """Return the first non-empty environment value for the given keys."""
+    for key in keys:
+        value = os.environ.get(key)
+        if value and value.strip():
+            return value.strip()
+    return None
+
+
+def parse_default_range_days() -> int:
+    """Return the configured default range size in days."""
+    raw_value = first_env_value(RANGE_DAYS_ENV_KEYS)
+    if raw_value is None:
+        return DEFAULT_RANGE_DAYS
+
+    try:
+        days = int(raw_value)
+    except ValueError as error:
+        names = ", ".join(RANGE_DAYS_ENV_KEYS)
+        raise IcsManagerError(f"{names} must be an integer number of days.") from error
+
+    if days <= 0:
+        names = ", ".join(RANGE_DAYS_ENV_KEYS)
+        raise IcsManagerError(f"{names} must be greater than zero.")
+
+    return days
+
+
+def default_range_start(now: datetime, window_days: int) -> datetime:
+    """Return the default range start using an anchored repeating window when configured."""
+    anchor_value = first_env_value(RANGE_START_ENV_KEYS)
+    if anchor_value is None:
+        return now
+
+    anchor = normalize_datetime(parse_user_temporal(anchor_value))
+    window = timedelta(days=window_days)
+    if now <= anchor:
+        return anchor
+
+    elapsed = now - anchor
+    windows_elapsed = int(elapsed.total_seconds() // window.total_seconds())
+    return anchor + (windows_elapsed * window)
+
+
+def resolve_range(args: argparse.Namespace) -> tuple[datetime, datetime]:
+    """Resolve the requested time range for read operations."""
+    window_days = parse_default_range_days()
+    now = datetime.now(timezone.utc)
+    fallback_start = default_range_start(now, window_days)
+    range_start = parse_range_boundary(args.start, fallback_start)
+    range_end = parse_range_boundary(args.end, range_start + timedelta(days=window_days))
+
+    if range_end <= range_start:
+        raise IcsManagerError("Range end must be later than range start.")
+
+    return range_start, range_end
+
+
+def parse_sources(raw_values: Iterable[str] | None) -> list[str]:
+    """Normalize repeated or comma/newline-separated source inputs."""
+    if raw_values is None:
+        return []
+
+    sources: list[str] = []
+    for raw_value in raw_values:
+        for line in raw_value.splitlines():
+            for item in line.split(","):
+                candidate = item.strip()
+                if candidate:
+                    sources.append(candidate)
+    return sources
+
+
+def resolve_read_sources(args: argparse.Namespace) -> list[str]:
+    """Resolve all read-only sources from flags or environment."""
+    cli_sources = parse_sources(getattr(args, "sources", None))
+    if cli_sources:
+        return cli_sources
+
+    env_sources = parse_sources([os.environ.get("ICS_SOURCE", "")])
+    if env_sources:
+        return env_sources
+
+    raise IcsManagerError(
+        "At least one --source is required. Set ICS_SOURCE in .env or pass --source explicitly."
+    )
 
 
 def stringify(value: Any) -> str:
@@ -208,6 +300,7 @@ def extract_exdates(component: Event) -> set[datetime]:
 
 def build_occurrence(
     component: Event,
+    source: str,
     occurrence_start: datetime,
     occurrence_end: datetime,
     recurring: bool,
@@ -219,6 +312,7 @@ def build_occurrence(
     attendees = parse_attendees(component.get("ATTENDEE"))
 
     return EventOccurrence(
+        source=source,
         uid=stringify(component.get("UID")),
         summary=stringify(component.get("SUMMARY")) or "(untitled)",
         start=occurrence_start,
@@ -236,6 +330,7 @@ def build_occurrence(
 
 def iter_occurrences(
     calendar: Calendar,
+    source: str,
     range_start: datetime,
     range_end: datetime,
 ) -> list[EventOccurrence]:
@@ -294,6 +389,7 @@ def iter_occurrences(
             occurrences.append(
                 build_occurrence(
                     component,
+                    source,
                     occurrence_start,
                     occurrence_end,
                     recurring=rrule_value is not None,
@@ -312,7 +408,7 @@ def iter_occurrences(
             continue
 
         occurrences.append(
-            build_occurrence(component, start_dt, end_dt, recurring=False)
+            build_occurrence(component, source, start_dt, end_dt, recurring=False)
         )
 
     return sorted(occurrences, key=lambda item: (item.start, item.summary, item.uid))
@@ -356,6 +452,7 @@ def format_event_line(occurrence: EventOccurrence) -> str:
     """Return a one-line text representation of an occurrence."""
     duration = round(occurrence.duration_hours, 2)
     parts = [
+        f"source={occurrence.source}",
         occurrence.start.isoformat(),
         occurrence.end.isoformat(),
         occurrence.summary,
@@ -373,18 +470,17 @@ def format_event_line(occurrence: EventOccurrence) -> str:
 
 def list_events(args: argparse.Namespace) -> int:
     """Handle the list-events subcommand."""
-    now = datetime.now(timezone.utc)
-    range_start = parse_range_boundary(args.start, now)
-    range_end = parse_range_boundary(
-        args.end, range_start + timedelta(days=DEFAULT_RANGE_DAYS)
-    )
+    range_start, range_end = resolve_range(args)
 
-    calendar = load_calendar(args.source)
     occurrences = [
         occurrence
-        for occurrence in iter_occurrences(calendar, range_start, range_end)
+        for source in resolve_read_sources(args)
+        for occurrence in iter_occurrences(
+            load_calendar(source), source, range_start, range_end
+        )
         if matches_contains(occurrence, args.contains)
     ]
+    occurrences.sort(key=lambda item: (item.start, item.summary, item.uid, item.source))
 
     if args.format == "json":
         print_json([occurrence.to_dict() for occurrence in occurrences])
@@ -401,18 +497,17 @@ def list_events(args: argparse.Namespace) -> int:
 
 def overview(args: argparse.Namespace) -> int:
     """Handle the overview subcommand."""
-    now = datetime.now(timezone.utc)
-    range_start = parse_range_boundary(args.start, now)
-    range_end = parse_range_boundary(
-        args.end, range_start + timedelta(days=DEFAULT_RANGE_DAYS)
-    )
+    range_start, range_end = resolve_range(args)
 
-    calendar = load_calendar(args.source)
     occurrences = [
         occurrence
-        for occurrence in iter_occurrences(calendar, range_start, range_end)
+        for source in resolve_read_sources(args)
+        for occurrence in iter_occurrences(
+            load_calendar(source), source, range_start, range_end
+        )
         if matches_contains(occurrence, args.contains)
     ]
+    occurrences.sort(key=lambda item: (item.start, item.summary, item.uid, item.source))
 
     total_hours = round(
         sum(
@@ -423,10 +518,12 @@ def overview(args: argparse.Namespace) -> int:
     )
     per_day_counts: dict[str, int] = defaultdict(int)
     summary_counts: Counter[str] = Counter()
+    source_counts: Counter[str] = Counter()
 
     for occurrence in occurrences:
         per_day_counts[occurrence.start.date().isoformat()] += 1
         summary_counts[occurrence.summary] += 1
+        source_counts[occurrence.source] += 1
 
     busiest_day = None
     if per_day_counts:
@@ -435,8 +532,13 @@ def overview(args: argparse.Namespace) -> int:
     payload = {
         "range_start": range_start.isoformat(),
         "range_end": range_end.isoformat(),
+        "sources": sorted(source_counts),
         "event_count": len(occurrences),
         "total_hours": total_hours,
+        "per_source": [
+            {"source": source, "event_count": count}
+            for source, count in source_counts.most_common()
+        ],
         "busiest_day": {
             "date": busiest_day[0],
             "event_count": busiest_day[1],
@@ -454,8 +556,13 @@ def overview(args: argparse.Namespace) -> int:
         return 0
 
     print(f"Range: {payload['range_start']} -> {payload['range_end']}")
+    print(f"Sources: {len(payload['sources'])}")
     print(f"Events: {payload['event_count']}")
     print(f"Total scheduled hours: {payload['total_hours']}")
+    if payload["per_source"]:
+        print("Per source:")
+        for item in payload["per_source"]:
+            print(f"- {item['source']}: {item['event_count']} events")
     if payload["busiest_day"]:
         print(
             "Busiest day: "
@@ -470,18 +577,17 @@ def overview(args: argparse.Namespace) -> int:
 
 def summarize_hours(args: argparse.Namespace) -> int:
     """Handle the summarize-hours subcommand."""
-    now = datetime.now(timezone.utc)
-    range_start = parse_range_boundary(args.start, now)
-    range_end = parse_range_boundary(
-        args.end, range_start + timedelta(days=DEFAULT_RANGE_DAYS)
-    )
+    range_start, range_end = resolve_range(args)
 
-    calendar = load_calendar(args.source)
     occurrences = [
         occurrence
-        for occurrence in iter_occurrences(calendar, range_start, range_end)
+        for source in resolve_read_sources(args)
+        for occurrence in iter_occurrences(
+            load_calendar(source), source, range_start, range_end
+        )
         if matches_contains(occurrence, args.contains)
     ]
+    occurrences.sort(key=lambda item: (item.start, item.summary, item.uid, item.source))
 
     totals: dict[str, float] = defaultdict(float)
     for occurrence in occurrences:
@@ -655,8 +761,12 @@ def build_parser() -> argparse.ArgumentParser:
     def add_common_range_arguments(command_parser: argparse.ArgumentParser) -> None:
         command_parser.add_argument(
             "--source",
-            default=os.environ.get("ICS_SOURCE"),
-            help="Local .ics path or HTTP(S) URL (default: $ICS_SOURCE)",
+            dest="sources",
+            action="append",
+            help=(
+                "Local .ics path or HTTP(S) URL. Repeat for multiple calendars; "
+                "defaults to comma/newline-separated $ICS_SOURCE"
+            ),
         )
         command_parser.add_argument(
             "--start", help="ISO date or datetime for range start"
@@ -694,11 +804,16 @@ def build_parser() -> argparse.ArgumentParser:
     )
     summarize_parser.set_defaults(handler=summarize_hours)
 
+    def first_local_source_default() -> str | None:
+        """Return the first local path from ICS_SOURCE, or None."""
+        candidates = parse_sources([os.environ.get("ICS_SOURCE", "")])
+        return next((s for s in candidates if not is_url(s)), None)
+
     add_parser = subparsers.add_parser("add-event", help="Add a VEVENT to a local file")
     add_parser.add_argument(
         "--source",
-        default=os.environ.get("ICS_SOURCE"),
-        help="Local .ics file path (default: $ICS_SOURCE)",
+        default=first_local_source_default(),
+        help="Local .ics file path (default: first local path in $ICS_SOURCE)",
     )
     add_parser.add_argument("--summary", required=True, help="Event summary")
     add_parser.add_argument("--start", required=True, help="ISO date or datetime")
@@ -719,8 +834,8 @@ def build_parser() -> argparse.ArgumentParser:
     update_parser = subparsers.add_parser("update-event", help="Update a VEVENT by UID")
     update_parser.add_argument(
         "--source",
-        default=os.environ.get("ICS_SOURCE"),
-        help="Local .ics file path (default: $ICS_SOURCE)",
+        default=first_local_source_default(),
+        help="Local .ics file path (default: first local path in $ICS_SOURCE)",
     )
     update_parser.add_argument("--uid", required=True, help="Event UID")
     update_parser.add_argument("--summary", help="Updated summary")
@@ -749,8 +864,8 @@ def build_parser() -> argparse.ArgumentParser:
     delete_parser = subparsers.add_parser("delete-event", help="Delete a VEVENT by UID")
     delete_parser.add_argument(
         "--source",
-        default=os.environ.get("ICS_SOURCE"),
-        help="Local .ics file path (default: $ICS_SOURCE)",
+        default=first_local_source_default(),
+        help="Local .ics file path (default: first local path in $ICS_SOURCE)",
     )
     delete_parser.add_argument("--uid", required=True, help="Event UID")
     delete_parser.add_argument(
@@ -769,13 +884,6 @@ def main(argv: Iterable[str] | None = None) -> int:
     load_env()
     parser = build_parser()
     args = parser.parse_args(list(argv) if argv is not None else None)
-
-    if getattr(args, "source", None) is None:
-        print(
-            "Error: --source is required. Set ICS_SOURCE in .env or pass --source explicitly.",
-            file=sys.stderr,
-        )
-        return 1
 
     try:
         return args.handler(args)
