@@ -7,6 +7,12 @@
       "skillPath": "skills/code-styleguide/SKILL.md",
       "computedHash": "0ec763f13b93827aca933bd81daaec9a9ab976200d640dcb0ea4c7360ffcd247"
     },
+    "create-spring-boot-java-project": {
+      "source": "github/awesome-copilot",
+      "sourceType": "github",
+      "skillPath": "skills/create-spring-boot-java-project/SKILL.md",
+      "computedHash": "f295d4ddc256642e850e7d7a40526ed10aad2801e0c202e0b4c78506c52f4461"
+    },
     "find-skills": {
       "source": "vercel-labs/skills",
       "sourceType": "github",
@@ -16,8 +22,8 @@
     "ics-manager": {
       "source": "hsiangjenli/skills",
       "sourceType": "github",
-      "skillPath": ".agents/skills/ics-manager/SKILL.md",
-      "computedHash": "39e65bc036324f62e9cc89be40e80b02a7d80414cf8beebd3abfa66381420722"
+      "skillPath": "skills/ics-manager/SKILL.md",
+      "computedHash": "a7b10e802465976e906e3e9c572a86d7f01389c86dc146576c43be54a23580ec"
     },
     "linkedin-about-writer": {
       "source": "hsiangjenli/skills",
@@ -28,7 +34,7 @@
     "mise": {
       "source": "hsiangjenli/skills",
       "sourceType": "github",
-      "skillPath": ".agents/skills/mise/SKILL.md",
+      "skillPath": "skills/mise/SKILL.md",
       "computedHash": "1f7fd94d5c6d0e476d1627393e1bd460b2b236b06647f3db2222a2fe51b5f3cd"
     },
     "python": {
@@ -41,7 +47,7 @@
       "source": "remotion-dev/skills",
       "sourceType": "github",
       "skillPath": "skills/remotion/SKILL.md",
-      "computedHash": "6b0cd8f84e1213ef7a198d9d68bd155fed3f4d985ef7d5b13d7be0aac1526493"
+      "computedHash": "006f8413941b59eff54a7ce64851b8a2fb79e7a3a5f1a895e97a48f01482553d"
     },
     "skill-creator": {
       "source": "anthropics/skills",
