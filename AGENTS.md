@@ -4,10 +4,12 @@ Development conventions for this repository.
 
 ## Skill Location
 
-All skills are developed **directly** under `skills/`. Do not use `.agents/skills` as a source — that sync workflow has been retired.
+All repository-managed skills are developed under `.agents/skills/`.
+
+Use `.agents/skills` as the canonical source directory for this repo. If a workflow or user has a special path requirement, treat that as an explicit override rather than the default convention.
 
 ```
-skills/
+.agents/skills/
 └── my-skill/
     ├── SKILL.md         ← required
     ├── scripts/         ← optional Python scripts
@@ -30,4 +32,4 @@ Follow the **`skill-creator-uv`** skill for all creation steps. If the skill inv
 
 ## Updating the README
 
-`README.md` is auto-generated from skill frontmatter by the GitHub Actions workflow on every push that modifies `skills/**/SKILL.md`. No manual step needed.
+`README.md` is auto-generated from skill frontmatter in `.agents/skills/**/SKILL.md` by the GitHub Actions workflow. No manual step needed.

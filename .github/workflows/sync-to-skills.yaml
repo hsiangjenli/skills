@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - "skills/**"
       - "scripts/**"
+      - ".agents/skills/**"
       - ".github/workflows/**"
 
 jobs:
@@ -20,7 +20,7 @@ jobs:
         uses: astral-sh/setup-uv@v5
 
       - name: Update README.md
-        run: uv run scripts/update_readme.py --source-dir skills
+        run: uv run scripts/update_readme.py --source-dir .agents/skills --source hsiangjenli/skills
 
       - name: Commit and push changes
         run: |
