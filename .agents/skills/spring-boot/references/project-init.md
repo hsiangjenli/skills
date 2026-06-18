@@ -4,12 +4,13 @@ Use this reference when creating a new Spring Boot project. Keep the base projec
 
 ## Defaults
 
-- Prefer Maven.
-- Prefer Spring Boot 4.1.0.
-- Prefer Java 25.
-- Do not add a database by default.
-- Only keep PostgreSQL and Redis as optional infra.
-- Use Podman Compose, not Docker Compose.
+- Maven
+- Spring Boot 4.1.0
+- a Java version supported by the target Spring Boot release
+- Java 25 only when the project explicitly targets the latest JDK
+- no database by default
+- PostgreSQL and Redis as the only optional infra
+- Podman Compose, not Docker Compose
 
 ## Dependency Selection
 
@@ -26,7 +27,7 @@ Start with a small core, then add only the needed modules.
 1. Confirm project name, package name, Java version, and required modules.
 2. Ask the user for the project name before generating the project.
 3. Generate the project from Spring Initializr with only the selected dependencies.
-4. Add infra config only for the services the project really uses.
+4. Generate only the config files required by the selected modules.
 5. Add Podman Compose only when PostgreSQL or Redis is needed locally.
 6. Run tests before adding feature code.
 
@@ -39,7 +40,7 @@ curl https://start.spring.io/starter.zip \
   -d artifactId=<project-name> \
   -d bootVersion=4.1.0 \
   -d dependencies=web,validation,lombok,configuration-processor \
-  -d javaVersion=25 \
+  -d javaVersion=<java-version> \
   -d packageName=com.example.app \
   -d packaging=jar \
   -d type=maven-project \
@@ -48,36 +49,20 @@ curl https://start.spring.io/starter.zip \
 
 Replace `<project-name>` with the name provided by the user.
 
+Replace `<java-version>` with the version chosen for the project.
+
 If the project needs persistence, extend `dependencies` with `data-jpa,postgresql`.
 
 If the project needs Redis, extend `dependencies` with `data-redis`.
 
-## Configurations
+## Config Checklist
 
-Generate configuration files from the selected modules instead of writing every service config by default.
-
-- Always generate a minimal `application.yml` or `application.properties`.
+- Generate a minimal `application.yml` or `application.properties`.
 - Add PostgreSQL settings only when `data-jpa,postgresql` is selected.
 - Add Redis settings only when `data-redis` is selected.
 - Generate `compose.yaml` only when local PostgreSQL or Redis is needed.
-- Use Podman Compose commands in examples and workflow text.
-
-Keep generated config small. Do not add placeholders for services the project does not use.
-
-## Local Infra
-
-- If PostgreSQL is needed, add datasource and JPA settings.
-- If Redis is needed, add Redis connection settings.
-- Do not add MongoDB or other databases in this default path.
-- Add Podman Compose only for the selected services.
-
-Example local infra choices:
-
-- PostgreSQL only
-- Redis only
-- PostgreSQL + Redis
-
-Use `podman compose up -d` and `podman compose down` for local service lifecycle.
+- Use `podman compose up -d` and `podman compose down`.
+- Do not add placeholders for unused services.
 
 ## Package Shape
 
