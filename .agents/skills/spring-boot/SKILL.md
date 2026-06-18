@@ -9,9 +9,11 @@ Use this skill for routine Spring Boot work. Read only the matching file in `ref
 
 ## Use This Skill When
 
-- setting up a Spring Boot project
-- adding or changing controller, service, DTO, entity, or repository code
-- deciding test scope for a Spring Boot change
+| Situation | Use this skill |
+| --- | --- |
+| Project setup | Create or align a Spring Boot project |
+| Application changes | Add or change controller, service, DTO, entity, or repository code |
+| Testing | Decide test scope for a Spring Boot change |
 
 ## Workflow
 
@@ -23,21 +25,28 @@ Use this skill for routine Spring Boot work. Read only the matching file in `ref
 
 ## Reference Map
 
-- For creating or aligning a new project, read `references/project-init.md`.
-- For controller, service, DTO, and validation work, read `references/web-layer.md`.
-- For entity, repository, and transactional persistence work, read `references/persistence.md`.
-- For test scope, slice selection, and test data setup, read `references/testing.md`.
+| Topic | Reference |
+| --- | --- |
+| Project setup and shared conventions | `references/common.md` |
+| Controller, request, response, and API validation | `references/controller.md` |
+| Use-case logic and transaction boundaries | `references/service.md` |
+| Entity, repository, mapper, and persistence | `references/dao.md` |
+| Test scope and validation checks | `references/unit-test.md` |
 
 ## Rules
 
-- Keep controller, service, and persistence concerns separate.
-- Do not add DTOs, entities, mappers, or repositories unless the use case needs them.
-- Treat tests as part of the change.
-- Check Spring docs when behavior is version-sensitive.
+| Rule | Meaning |
+| --- | --- |
+| Separate layers | Keep controller, service, and persistence concerns separate |
+| Add only what is needed | Do not add DTOs, entities, mappers, or repositories unless the use case needs them |
+| Test with the change | Treat tests as part of the change |
+| Check version-sensitive behavior | Check Spring docs when behavior is version-sensitive |
 
 ## Quick Decisions
 
-- Use a DTO when the API contract differs from the persistence model or needs request validation.
-- Use an entity only for persisted domain state.
-- Add mapping code only when both DTOs and entities exist.
-- Split services only when they have multiple reasons to change.
+| Decision | Default |
+| --- | --- |
+| When to use a DTO | When the API contract differs from the persistence model or needs request validation |
+| When to use an entity | Only for persisted domain state |
+| When to add mapping | When both DTOs and entities exist |
+| When to split services | When they have multiple reasons to change |

@@ -1,6 +1,6 @@
-# Persistence
+# DAO
 
-Use this reference for JPA entities, repositories, transactions, schema-facing changes, and mapping between persistence and API models.
+Use this reference for entities, repositories, mappers, and persistence details.
 
 ## Repository Rules
 
@@ -20,24 +20,10 @@ Use this reference for JPA entities, repositories, transactions, schema-facing c
 ## Mapping
 
 - Use MapStruct for DTO <-> Entity mapping when the project standard includes MapStruct.
-- Map entities to the request and response DTOs defined by the web layer.
+- Map entities to the request and response DTOs defined by the controller layer.
 - Support single object mapping and list mapping.
 - Add explicit mapper methods for create request DTO -> entity.
 - Add explicit mapper methods for update request DTO -> existing entity.
 - Add explicit mapper methods for entity -> response DTO.
 - Add explicit mapper methods for `List<Entity>` -> `List<ResponseDto>` when an endpoint returns collections.
 - Do not hand-write repetitive mapping code unless the project already has a clear reason to avoid MapStruct.
-
-## Transactions
-
-- Place transaction boundaries in services.
-- Use read-only transactions for read flows when the repository already follows that pattern.
-- Keep transaction scope small and aligned to a use case.
-
-## Persistence Validation
-
-Prefer the narrowest check available:
-
-- repository tests for query behavior,
-- service tests for transactional flows,
-- integration tests for full persistence wiring.
