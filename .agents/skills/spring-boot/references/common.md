@@ -72,8 +72,18 @@ Replace `<java-version>` with the chosen version.
 ## Package Rules
 
 - Avoid deep package nesting unless the domain size really needs it.
-- Start simple with top-level packages such as `controller/`, `service/`, `repository/`, `entity/`, `config/`, and `dto/`.
+- Start simple with top-level packages such as `controller/`, `service/`, `repository/`, `entity/`, `config/`, `dto/`, and `exception/`.
+- Keep DTO classes under `dto/`.
+- Give each endpoint or use case its own `*RequestBody` and `*ResponseBody` classes under `dto/`.
 - If the domain grows, split by domain under the layer package rather than adding many nested levels.
+
+```text
+dto/
+  CreateUserRequestBody.java
+  CreateUserResponseBody.java
+  GetBookRequestBody.java
+  GetBookResponseBody.java
+```
 
 ```text
 service/
@@ -96,3 +106,14 @@ service/
 - Define a service interface by default.
 - Add a matching `ServiceImpl` implementation by default.
 - Keep this pattern even when there is only one implementation, because multiple implementations are expected.
+
+## Exception Handling
+
+- Prefer a global `@RestControllerAdvice` for application-wide exception translation.
+- Map business and validation failures to a consistent `ErrorResponse<TBody>` shape and HTTP status.
+- Keep controller methods free of repetitive `try`/`catch` blocks unless local recovery is required.
+- Define custom exceptions under an `exception/` package and let the service layer raise them explicitly.
+- Group custom exceptions by shared error semantics when multiple cases can reuse the same handler.
+- Translate framework exceptions, such as validation failures, in one place instead of duplicating handling per controller.
+- Keep the error envelope aligned with the controller response envelope so clients can reuse parsing logic.
+- Extract shared response-building and error-mapping logic in the advice into private helper methods or a small shared mapper when several handlers need the same shape.
