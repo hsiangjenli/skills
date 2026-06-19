@@ -2,12 +2,6 @@
 
 Use this reference for use-case logic, orchestration, and transaction boundaries.
 
-## Responsibilities
-
-- Services hold use-case logic.
-- Services orchestrate repository access and mapping.
-- Services define transaction boundaries.
-
 ## Rules
 
 - Keep one service method aligned to one use case where practical.

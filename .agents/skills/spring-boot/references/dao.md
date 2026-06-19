@@ -22,8 +22,8 @@ Use this reference for entities, repositories, mappers, and persistence details.
 - Use MapStruct for DTO <-> Entity mapping when the project standard includes MapStruct.
 - Map entities to the request and response DTOs defined by the controller layer.
 - Support single object mapping and list mapping.
-- Add explicit mapper methods for create request DTO -> entity.
-- Add explicit mapper methods for update request DTO -> existing entity.
-- Add explicit mapper methods for entity -> response DTO.
-- Add explicit mapper methods for `List<Entity>` -> `List<ResponseDto>` when an endpoint returns collections.
+- Add explicit mapper methods for create request body -> entity.
+- Add explicit mapper methods for update request body -> existing entity.
+- Add explicit mapper methods for entity -> response body.
+- Add explicit mapper methods for `List<Entity>` -> `List<...ResponseBody>` when an endpoint returns collections.
 - Do not hand-write repetitive mapping code unless the project already has a clear reason to avoid MapStruct.

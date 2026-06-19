@@ -5,11 +5,10 @@ Use this reference for controllers, request and response DTOs, and API validatio
 ## Workflow
 
 1. Define the shared request and response envelope first.
-2. Define the shared error envelope alongside the response envelope.
-3. Define request and response DTOs per endpoint or use case.
-4. Delegate business logic to services.
-5. Let the service layer produce the response body.
-6. Return `ResponseEntity<Response<TBody>>` for success and let `@RestControllerAdvice` build `ResponseEntity<ErrorResponse<TBody>>` for failure.
+2. Define request and response DTOs per endpoint or use case.
+3. Delegate business logic to services.
+4. Let the service layer produce the response body.
+5. Return `ResponseEntity<Response<TBody>>` for success and let `@RestControllerAdvice` build `ResponseEntity<ErrorResponse<Void>>` for failure.
 
 ## Envelope
 
@@ -17,7 +16,7 @@ Use this reference for controllers, request and response DTOs, and API validatio
 | --- | --- |
 | Request | Define a shared `Request<TBody>` first |
 | Response | Define a shared `Response<TBody>` first |
-| Error response | Define a shared `ErrorResponse<TBody>` with the same envelope shape |
+| Error response | Define a shared `ErrorResponse<Void>` with the same envelope shape |
 | Header | Keep a fixed header format |
 | Body | Put the actual request or response DTO in `body` |
 
@@ -84,7 +83,7 @@ public ResponseEntity<Response<CreateUserResponseBody>> createUser(
 
 - Populate the header with the same routing and transaction fields as the request when they are available.
 - Use `returnCode` and `returnMessage` to describe the error at the protocol level.
-- Keep the `body` field in the error response even when it is empty.
+- Use `Void` when the error response has no detail body.
 - Let controllers stay focused on success flow; the advice layer should translate failures.
 
 ## DTO Guidance
@@ -94,7 +93,6 @@ public ResponseEntity<Response<CreateUserResponseBody>> createUser(
 - Put endpoint-specific DTO fields in `body`, not in the shared header.
 - Let services produce response bodies; controllers should wrap them in the shared response envelope.
 - Avoid passing entities directly across controller boundaries.
-- Keep error responses on the same envelope shape; use an empty body when no error detail is returned.
 
 ## Validation Guidance
 
