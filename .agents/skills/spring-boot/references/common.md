@@ -55,3 +55,44 @@ Replace `<java-version>` with the chosen version.
 - Generate `compose.yaml` only when local PostgreSQL or Redis is needed.
 - Use `podman compose up -d` and `podman compose down`.
 - Do not add placeholders for unused services.
+
+## Naming Rules
+
+| Type | Suffix |
+| --- | --- |
+| Controller | `Controller` |
+| Service interface | `Service` |
+| Service implementation | `ServiceImpl` |
+| Entity | `Entity` |
+| Repository | `Repository` |
+| Configuration | `Configuration` |
+| Request DTO | `RequestBody` |
+| Response DTO | `ResponseBody` |
+
+## Package Rules
+
+- Avoid deep package nesting unless the domain size really needs it.
+- Start simple with top-level packages such as `controller/`, `service/`, `repository/`, `entity/`, `config/`, and `dto/`.
+- If the domain grows, split by domain under the layer package rather than adding many nested levels.
+
+```text
+service/
+  BookService.java
+  BookServiceImpl.java
+```
+
+```text
+service/
+  book/
+    BookService.java
+    BookServiceImpl.java
+  school/
+    SchoolService.java
+    SchoolServiceImpl.java
+```
+
+## Service Structure
+
+- Define a service interface by default.
+- Add a matching `ServiceImpl` implementation by default.
+- Keep this pattern even when there is only one implementation, because multiple implementations are expected.
