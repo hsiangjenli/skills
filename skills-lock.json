@@ -73,6 +73,12 @@
       "skillPath": "skills/slidev-theme-neversink/SKILL.md",
       "computedHash": "c0b2e15218cca52b69d0fda9abc97e4bebd059da088a43d2cb7b362529aec238"
     },
+    "spring-boot": {
+      "source": "hsiangjenli/skills",
+      "sourceType": "github",
+      "skillPath": ".agents/skills/spring-boot/SKILL.md",
+      "computedHash": "894a36cc46a941f1585ce614d09b08a28c961156e1f57e426945238102c067a5"
+    },
     "tech-slide": {
       "source": "hsiangjenli/skills",
       "sourceType": "github",
