@@ -1,0 +1,12 @@
+[project]
+name = "tech-slide"
+version = "0.1.0"
+description = "TODO: Brief description of this skill"
+requires-python = ">=3.8"
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "ruff>=0.1.0",
+]
