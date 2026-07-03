@@ -76,7 +76,7 @@
     "spring-boot": {
       "source": "hsiangjenli/skills",
       "sourceType": "github",
-      "skillPath": ".agents/skills/spring-boot/SKILL.md",
+      "skillPath": "skills/spring-boot/SKILL.md",
       "computedHash": "894a36cc46a941f1585ce614d09b08a28c961156e1f57e426945238102c067a5"
     },
     "tech-slide": {
