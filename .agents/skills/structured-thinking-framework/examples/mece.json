@@ -1,0 +1,23 @@
+{
+  "framework": "mece",
+  "title": "Improve delivery reliability",
+  "problem": "Delivery dates are frequently missed and the causes are unclear.",
+  "objective": "Identify actionable areas for improving delivery reliability.",
+  "facts": ["Three recent releases missed their target date."],
+  "assumptions": ["Planning and handoffs contribute to delay."],
+  "constraints": ["No additional headcount this quarter."],
+  "framework_data": {
+    "root_question": "What parts of the delivery system should be examined?",
+    "branches": [
+      {"label": "Planning", "children": ["scope clarity", "capacity forecast"]},
+      {"label": "Execution", "children": ["work in progress", "handoffs"]}
+    ],
+    "coverage_check": "The tree covers planning and execution stages.",
+    "overlap_check": "Branches use delivery lifecycle stage as the organizing rule."
+  },
+  "risks": ["The current sample may be too small to identify all causes."],
+  "open_questions": ["Which stage contributes the most delay?"],
+  "next_actions": ["Collect cycle-time data by delivery stage."],
+  "theme": {"primary": "#7c3aed", "accent": "#f97316"},
+  "preset": "web-16x9"
+}

@@ -1,0 +1,13 @@
+[project]
+name = "structured-thinking-framework"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.11"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "mypy>=2.3.0",
+    "pytest>=9.1.1",
+    "ruff>=0.16.2",
+]

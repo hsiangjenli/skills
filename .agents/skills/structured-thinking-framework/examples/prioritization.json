@@ -1,0 +1,24 @@
+{
+  "framework": "prioritization",
+  "title": "Prioritize onboarding improvements",
+  "problem": "There are more onboarding improvements than the team can deliver this quarter.",
+  "objective": "Select the initiatives with the best expected impact per effort.",
+  "facts": ["The team can deliver three initiatives this quarter."],
+  "assumptions": ["Impact scores are based on stakeholder estimates."],
+  "constraints": ["Engineering capacity is fixed."],
+  "framework_data": {
+    "method": "impact-effort",
+    "criteria": ["impact", "effort"],
+    "weights": {"impact": 0.6, "effort": 0.4},
+    "items": [
+      {"name": "Self-service onboarding", "scores": {"impact": 5, "effort": 2}, "confidence": "medium"},
+      {"name": "Guided checklist", "scores": {"impact": 4, "effort": 1}, "confidence": "high"}
+    ],
+    "ranking": ["Guided checklist", "Self-service onboarding"],
+    "sensitivity": "Ranking changes if effort is weighted above 60%."
+  },
+  "risks": ["Scores may favor easy work over strategic work."],
+  "open_questions": ["Can impact be validated with funnel data?"],
+  "next_actions": ["Validate the top two items with a small experiment."],
+  "preset": "social-square"
+}

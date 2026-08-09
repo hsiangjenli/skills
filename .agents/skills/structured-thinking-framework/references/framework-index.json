@@ -1,0 +1,38 @@
+{
+  "version": "1.0",
+  "frameworks": [
+    {
+      "id": "mece",
+      "name": "MECE problem decomposition",
+      "summary": "Break a broad problem into mutually exclusive and collectively exhaustive branches.",
+      "reference": "mece.md",
+      "keywords": ["mece", "break down", "decompose", "problem tree", "structure"],
+      "problem_types": ["ambiguous problem", "complex question", "scope definition"],
+      "shared_fields": ["problem", "objective", "facts", "assumptions", "constraints"],
+      "framework_fields": ["root_question", "branches", "coverage_check", "overlap_check"],
+      "visualizations": ["problem-tree", "nested-cards", "flowchart"]
+    },
+    {
+      "id": "swot-scenario",
+      "name": "SWOT and scenario analysis",
+      "summary": "Analyze internal capabilities, external conditions, and plausible future scenarios.",
+      "reference": "swot-scenario.md",
+      "keywords": ["swot", "scenario", "market", "strategy", "opportunity", "threat"],
+      "problem_types": ["strategy", "market uncertainty", "situational analysis"],
+      "shared_fields": ["problem", "objective", "facts", "assumptions", "constraints"],
+      "framework_fields": ["strengths", "weaknesses", "opportunities", "threats", "scenarios", "strategic_options"],
+      "visualizations": ["swot-grid", "scenario-cards", "strategy-map"]
+    },
+    {
+      "id": "prioritization",
+      "name": "Prioritization analysis",
+      "summary": "Rank options using explicit criteria, scores, weights, and confidence.",
+      "reference": "prioritization.md",
+      "keywords": ["prioritize", "ranking", "rice", "impact effort", "roadmap", "trade-off"],
+      "problem_types": ["resource allocation", "roadmap", "option selection"],
+      "shared_fields": ["problem", "objective", "facts", "assumptions", "constraints"],
+      "framework_fields": ["method", "criteria", "weights", "items", "ranking", "sensitivity"],
+      "visualizations": ["ranked-table", "impact-effort", "scorecards"]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "framework": "swot-scenario",
+  "title": "Assess a new market segment",
+  "problem": "The team is deciding whether to enter a new segment.",
+  "objective": "Understand strategic position and prepare for uncertainty.",
+  "facts": ["The company has an existing distribution channel."],
+  "assumptions": ["Demand in the segment will grow next year."],
+  "constraints": ["Support capacity is limited."],
+  "framework_data": {
+    "strengths": [{"text": "Existing distribution", "evidence_type": "fact"}],
+    "weaknesses": [{"text": "Limited support capacity", "evidence_type": "estimate"}],
+    "opportunities": [{"text": "Growing segment demand", "evidence_type": "assumption"}],
+    "threats": [{"text": "Price competition", "evidence_type": "fact"}],
+    "scenarios": [{"name": "High demand", "conditions": ["Segment grows"], "response": "Scale support before launch"}],
+    "strategic_options": ["Pilot with a narrow segment"]
+  },
+  "risks": ["The demand assumption may not hold."],
+  "open_questions": ["What is the minimum viable support capacity?"],
+  "next_actions": ["Validate demand with ten customer interviews."],
+  "preset": "presentation-16x9"
+}

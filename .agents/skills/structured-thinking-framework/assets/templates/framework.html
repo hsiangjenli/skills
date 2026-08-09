@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }}</title>
+  <link rel="stylesheet" href="{{ stylesheet }}">
+  <style>{{ theme_css }}</style>
+</head>
+<body>
+  <main class="page">
+    <div class="eyebrow">{{ framework_name }}</div>
+    <h1>{{ title }}</h1>
+    <p class="meta">Canvas: {{ preset_name }} · {{ canvas_width }} × {{ canvas_height }}</p>
+    {{ common_sections }}
+    <section class="section">
+      <h2>Framework analysis</h2>
+      {{ framework_sections }}
+    </section>
+  </main>
+</body>
+</html>

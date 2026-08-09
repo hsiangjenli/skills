@@ -1,0 +1,91 @@
+---
+name: structured-thinking-framework
+description: "TODO: Complete description of what this skill does and when to use it"
+---
+
+# Structured Thinking Framework
+
+## Overview
+
+[TODO: Brief explanation of skill purpose]
+
+## Quick Start
+
+[TODO: Essential usage instructions]
+
+### Dependencies Setup
+
+This skill includes Python scripts with dependencies managed by uv.
+
+**First time setup:**
+```bash
+# Check and install dependencies
+uv run scripts/check_dependencies.py --install
+
+# Or manually sync dependencies
+uv sync
+```
+
+**Before using scripts:**
+```bash
+# Check if dependencies are ready
+uv run scripts/check_dependencies.py
+
+# Run skill scripts
+uv run scripts/structured-thinking-framework_helper.py <input>
+```
+
+### Adding New Dependencies
+
+When developing this skill, add new packages to `pyproject.toml`:
+
+```bash
+# Add production dependency
+uv add package-name
+
+# Add development dependency  
+uv add --dev pytest ruff mypy
+```
+
+## Code Quality
+
+```bash
+# Format code
+uv run ruff format .
+
+# Lint and auto-fix
+uv run ruff check . --fix
+
+# Type check
+uv run mypy scripts/
+
+# Run tests
+uv run pytest
+```
+
+Use numpy-style docstrings for all functions:
+
+```python
+def my_function(param: str) -> str:
+    """
+    Brief one-line description.
+
+    Parameters
+    ----------
+    param : str
+        Description of the parameter.
+
+    Returns
+    -------
+    str
+        Description of the return value.
+    """
+```
+
+## Resources
+
+- scripts/ - Executable utilities (use `uv run` to execute)
+- references/ - Detailed documentation 
+- assets/ - Templates and files for output
+
+Delete unused directories and update this documentation.
