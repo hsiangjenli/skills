@@ -17,7 +17,7 @@
       "source": "vercel-labs/skills",
       "sourceType": "github",
       "skillPath": "skills/find-skills/SKILL.md",
-      "computedHash": "9e1c8b3103f92fa8092568a44fe64858de7c5c9dc65ce4bea8f168080e889cfd"
+      "computedHash": "b146008599c31057cef1c145774cea5d5afb30e8f43fa802e47a4b461419aaaf"
     },
     "ics-manager": {
       "source": "hsiangjenli/skills",
@@ -43,12 +43,6 @@
       "skillPath": "skills/python/SKILL.md",
       "computedHash": "27753573102b52088f5ac483ad7086e93e6633d8438dc92c5ac647a9143b6153"
     },
-    "remotion-best-practices": {
-      "source": "remotion-dev/skills",
-      "sourceType": "github",
-      "skillPath": "skills/remotion/SKILL.md",
-      "computedHash": "006f8413941b59eff54a7ce64851b8a2fb79e7a3a5f1a895e97a48f01482553d"
-    },
     "skill-creator": {
       "source": "anthropics/skills",
       "sourceType": "github",
@@ -59,13 +53,13 @@
       "source": "hsiangjenli/skills",
       "sourceType": "github",
       "skillPath": "skills/skill-creator-uv/SKILL.md",
-      "computedHash": "c64ba4d1f0848ebff51d400511c682440cffd143cef4376e2d2e21d5c9b0d829"
+      "computedHash": "166837ee49c991c55f8c1ed969a31680a14ee078e19b0d344cefc2da625375cf"
     },
     "slidev": {
       "source": "slidevjs/slidev",
       "sourceType": "github",
       "skillPath": "skills/slidev/SKILL.md",
-      "computedHash": "a495cfada5d3b29c66c2fbbccb4ef9887d6b12bd7e440d100deea89e529c1a7b"
+      "computedHash": "64746507a65f5cae5386d2fd3acefc7f77edf7c4b60de596d7b1cabec87db11e"
     },
     "slidev-theme-neversink": {
       "source": "hsiangjenli/skills",

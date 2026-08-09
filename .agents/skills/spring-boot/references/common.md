@@ -64,8 +64,6 @@ Replace `<java-version>` with the chosen version.
 | Service implementation | `ServiceImpl` |
 | Entity | `Entity` |
 | Repository | `Repository` |
-| Repository custom fragment interface | `RepositoryCustom` |
-| Repository custom implementation | `RepositoryImpl` |
 | Configuration | `Configuration` |
 | Request DTO | `RequestBody` |
 | Response DTO | `ResponseBody` |
@@ -77,7 +75,6 @@ Replace `<java-version>` with the chosen version.
 - Keep DTO classes under `dto/`.
 - Give each endpoint or use case its own `*RequestBody` and `*ResponseBody` classes under `dto/`.
 - Define a `*Service` interface and a matching `*ServiceImpl` by default.
-- When a repository needs custom methods, define a matching `*RepositoryCustom`, have the main `*Repository` extend it, and implement the methods in `*RepositoryImpl`.
 - If the domain grows, split by domain under the layer package rather than adding many nested levels.
 
 ```text
