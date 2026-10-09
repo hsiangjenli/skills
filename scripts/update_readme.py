@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Update README.md with skills list from .agents/skills directory.
+Update README.md with skills list from the skills directory.
 """
 
 import argparse
@@ -64,9 +64,11 @@ def load_skills_lock(skills_lock_path: Path) -> dict:
         return json.load(f)
 
 
-def filter_skills_by_source(skills_data: dict, target_source: str) -> list[str]:
+def filter_skills_by_source(
+    skills_data: dict, target_source: str, skill_names: list[str]
+) -> list[str]:
     """
-    Filter skills by source.
+    Filter skills by source, keeping locally created skills not tracked in the lock file.
 
     Parameters
     ----------
@@ -74,20 +76,20 @@ def filter_skills_by_source(skills_data: dict, target_source: str) -> list[str]:
         The skills dictionary from skills-lock.json
     target_source : str
         The source to filter by (e.g., "hsiangjenli/skills")
+    skill_names : list[str]
+        Skill directory names to filter
 
     Returns
     -------
     list[str]
-        List of skill names that match the target source
+        List of skill names that match the target source or are not in the lock file
     """
-    filtered_skills = []
     skills = skills_data.get("skills", {})
-
-    for skill_name, skill_info in skills.items():
-        if skill_info.get("source") == target_source:
-            filtered_skills.append(skill_name)
-
-    return filtered_skills
+    return [
+        skill_name
+        for skill_name in skill_names
+        if skill_name not in skills or skills[skill_name].get("source") == target_source
+    ]
 
 
 def generate_skills_table(
@@ -99,7 +101,7 @@ def generate_skills_table(
     Parameters
     ----------
     skills_dir : Path
-        Path to .agents/skills directory
+        Path to the skills directory
     allowed_skills : list[str] | None
         If provided, only include skills whose directory name is in this list.
 
@@ -110,7 +112,7 @@ def generate_skills_table(
     """
     skills = []
 
-    # Scan all subdirectories in .agents/skills
+    # Scan all subdirectories in skills
     for skill_dir in sorted(skills_dir.iterdir()):
         if not skill_dir.is_dir():
             continue
@@ -173,7 +175,7 @@ def main():
     )
     parser.add_argument(
         "--source-dir",
-        default=".agents/skills",
+        default="skills",
         help="Source directory path",
     )
     args = parser.parse_args()
@@ -190,14 +192,14 @@ def main():
         print(f"Error: {skills_dir} does not exist")
         return
 
-    # Optionally filter by source
     allowed_skills = None
     if args.source:
         if not skills_lock_path.exists():
             print(f"Error: {skills_lock_path} does not exist")
             return
         skills_data = load_skills_lock(skills_lock_path)
-        allowed_skills = filter_skills_by_source(skills_data, args.source)
+        skill_names = [path.name for path in skills_dir.iterdir() if path.is_dir()]
+        allowed_skills = filter_skills_by_source(skills_data, args.source, skill_names)
         print(
             f"Filtering by source '{args.source}': {len(allowed_skills)} skills matched"
         )
