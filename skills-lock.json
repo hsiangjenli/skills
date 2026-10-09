@@ -1,6 +1,12 @@
 {
   "version": 3,
   "skills": {
+    "audio-transcribe-note": {
+      "source": "hsiangjenli/skills",
+      "sourceType": "github",
+      "skillPath": "skills/audio-transcribe-note/SKILL.md",
+      "computedHash": "bc11aa7734894d807745cfcc9d858b3f257b1f887ba3b1440406b76a56430089"
+    },
     "code-styleguide": {
       "source": "hsiangjenli/skills",
       "sourceType": "github",
@@ -8,16 +14,16 @@
       "computedHash": "0ec763f13b93827aca933bd81daaec9a9ab976200d640dcb0ea4c7360ffcd247"
     },
     "create-spring-boot-java-project": {
-      "source": "github/awesome-copilot",
+      "source": "hsiangjenli/skills",
       "sourceType": "github",
       "skillPath": "skills/create-spring-boot-java-project/SKILL.md",
       "computedHash": "f295d4ddc256642e850e7d7a40526ed10aad2801e0c202e0b4c78506c52f4461"
     },
     "find-skills": {
-      "source": "vercel-labs/skills",
+      "source": "hsiangjenli/skills",
       "sourceType": "github",
       "skillPath": "skills/find-skills/SKILL.md",
-      "computedHash": "b146008599c31057cef1c145774cea5d5afb30e8f43fa802e47a4b461419aaaf"
+      "computedHash": "d31e234f0c90694a670222cdd1dafa853e051d7066beda389f1097c22dadd461"
     },
     "ics-manager": {
       "source": "hsiangjenli/skills",
@@ -50,7 +56,7 @@
       "computedHash": "27753573102b52088f5ac483ad7086e93e6633d8438dc92c5ac647a9143b6153"
     },
     "skill-creator": {
-      "source": "anthropics/skills",
+      "source": "hsiangjenli/skills",
       "sourceType": "github",
       "skillPath": "skills/skill-creator/SKILL.md",
       "computedHash": "5ea13a6d9f0d4bb694405d79acd00cadec0d21bb138c4dd10fcf3c500cb835c2"
@@ -59,13 +65,13 @@
       "source": "hsiangjenli/skills",
       "sourceType": "github",
       "skillPath": "skills/skill-creator-uv/SKILL.md",
-      "computedHash": "166837ee49c991c55f8c1ed969a31680a14ee078e19b0d344cefc2da625375cf"
+      "computedHash": "63d02cfcd52442849f205680018ed4e9c26b18f6f39bdb6895569290ee6a20be"
     },
     "slidev": {
-      "source": "slidevjs/slidev",
+      "source": "hsiangjenli/skills",
       "sourceType": "github",
       "skillPath": "skills/slidev/SKILL.md",
-      "computedHash": "64746507a65f5cae5386d2fd3acefc7f77edf7c4b60de596d7b1cabec87db11e"
+      "computedHash": "a495cfada5d3b29c66c2fbbccb4ef9887d6b12bd7e440d100deea89e529c1a7b"
     },
     "slidev-theme-neversink": {
       "source": "hsiangjenli/skills",

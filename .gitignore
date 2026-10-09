@@ -1,5 +1,5 @@
 # Too large skills to be included in the repo
-.agents/skills/ppt-master/
+.agents/
 
 # Other agent's directories
 .claude/
