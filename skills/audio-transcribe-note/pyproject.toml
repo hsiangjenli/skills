@@ -1,0 +1,16 @@
+[project]
+name = "audio-transcribe-note"
+version = "0.1.0"
+description = "Transcribe audio with OpenRouter, correct typos, and write markdown notes"
+requires-python = ">=3.11"
+dependencies = [
+    "pydub>=0.25.1",
+    "python-dotenv>=1.1.1",
+    "requests>=2.32.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+    "ruff>=0.6.0",
+]
