@@ -76,7 +76,7 @@ class PathSelector:
     @staticmethod
     def get_default_path() -> Path:
         """Get default skill creation path."""
-        return Path.cwd() / ".agents" / "skills"
+        return Path.cwd() / "skills"
 
     @staticmethod
     def prompt_for_path(skill_name: str) -> Optional[Path]:

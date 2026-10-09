@@ -37,6 +37,12 @@
       "skillPath": "skills/mise/SKILL.md",
       "computedHash": "1f7fd94d5c6d0e476d1627393e1bd460b2b236b06647f3db2222a2fe51b5f3cd"
     },
+    "ppt-master": {
+      "source": "hugohe3/ppt-master",
+      "sourceType": "github",
+      "skillPath": "skills/ppt-master/SKILL.md",
+      "computedHash": "0a5c4d9a48cfc302407dafd7ea12eb84a7f4acae2251d7d67a2e0f3992e2f981"
+    },
     "python": {
       "source": "hsiangjenli/skills",
       "sourceType": "github",

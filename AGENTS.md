@@ -4,12 +4,12 @@ Development conventions for this repository.
 
 ## Skill Location
 
-All repository-managed skills are developed under `.agents/skills/`.
+All repository-managed skills live under `skills/`. This is the canonical source directory, is published to GitHub, and is what `npx skills add` consumes.
 
-Use `.agents/skills` as the canonical source directory for this repo. If a workflow or user has a special path requirement, treat that as an explicit override rather than the default convention.
+Do not create new skills under `.agents/skills/`. That directory is legacy and must not be used as a source.
 
 ```
-.agents/skills/
+skills/
 └── my-skill/
     ├── SKILL.md         ← required
     ├── scripts/         ← optional Python scripts
@@ -32,4 +32,4 @@ Follow the **`skill-creator-uv`** skill for all creation steps. If the skill inv
 
 ## Updating the README
 
-`README.md` is auto-generated from skill frontmatter in `.agents/skills/**/SKILL.md` by the GitHub Actions workflow. No manual step needed.
+`README.md` is auto-generated from skill frontmatter in `skills/**/SKILL.md` by the GitHub Actions workflow `.github/workflows/sync-to-skills.yaml`. No manual step needed.

@@ -39,7 +39,7 @@ skill-name/
 
 ### 1. Initialize Skill
 
-In this repository, the default location is `.agents/skills/<skill-name>/`. Keep that as the standard source of truth unless the user explicitly asks for a different target path.
+In this repository, the default location is `skills/<skill-name>/`. Keep that as the standard source of truth unless the user explicitly asks for a different target path.
 
 ```bash
 # Interactive mode (recommended)
@@ -53,10 +53,10 @@ uv run scripts/init_skill.py my-skill-name --path ./custom/location
 ```
 
 Path behavior:
-- Default interactive choice: `.agents/skills/`
-- Default non-interactive choice: `.agents/skills/`
+- Default interactive choice: `skills/`
+- Default non-interactive choice: `skills/`
 - Explicit override: `--path <custom/location>` when a user or workflow needs a special destination
-- If you create a skill outside `.agents/skills/`, call out that it is a custom path override rather than the repo default
+- If you create a skill outside `skills/`, call out that it is a custom path override rather than the repo default
 
 ### 2. Edit SKILL.md
 
@@ -121,10 +121,10 @@ uv run scripts/helper.py
 
 ```bash
 # Package to current directory
-uv run scripts/package_skill.py .agents/skills/my-skill
+uv run scripts/package_skill.py skills/my-skill
 
 # Package to specific output directory
-uv run scripts/package_skill.py .agents/skills/my-skill ./dist
+uv run scripts/package_skill.py skills/my-skill ./dist
 ```
 
 ## Best Practices
@@ -213,7 +213,7 @@ For non-Python skills, check the skill directory for:
 ### 3. Standard Skill Usage Pattern
 ```bash
 # Step 1: Navigate to skill directory
-cd .agents/skills/my-skill
+cd skills/my-skill
 
 # Step 2: Check for and install dependencies
 # (Language-specific command based on what files are present)
@@ -237,7 +237,7 @@ uv tree
 
 ```bash
 # Validate skill structure
-uv run scripts/quick_validate.py .agents/skills/my-skill
+uv run scripts/quick_validate.py skills/my-skill
 ```
 
 Validates:
