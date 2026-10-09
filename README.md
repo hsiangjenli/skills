@@ -2,7 +2,7 @@
 
 | Skill Name | Description |
 |------------|-------------|
-| `audio-transcribe-note` | Transcribe user-provided audio through OpenRouter, correct typos in the transcript, and produce a markdown note. Use when the user provides an audio file (.m4a, .mp3, .wav) and wants a transcript, a corrected *-ref.txt transcript, or an ai-note.md note in a raw/transcription/note project layout. |
+| `audio-transcribe-note` | Transcribe user-provided audio through OpenRouter, then correct typos and write a markdown note by following the bundled prompts. Use when the user provides an audio file (.m4a, .mp3, .wav) and wants a transcript, a corrected *-ref.txt transcript, or a *-ai-note.md note in a raw/transcription/note project layout. |
 | `code-styleguide` | Universal code style guidelines and principles for writing clean, maintainable code in any programming language. Use when writing or reviewing code, refactoring existing code, conducting code reviews, or establishing coding standards. Focuses on abstraction, KISS principles, SOLID principles, and avoiding over-engineering. |
 | `create-spring-boot-java-project` | 'Create Spring Boot Java Project Skeleton' |
 | `find-skills` | Helps users discover and install agent skills when they ask questions like "how do I do X", "find a skill for X", "is there a skill that can...", or express interest in extending capabilities. This skill should be used when the user is looking for functionality that might exist as an installable skill. |
